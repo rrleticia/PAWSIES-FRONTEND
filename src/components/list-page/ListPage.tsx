@@ -77,22 +77,18 @@ const PageInfo: React.FC<IPageInfoProps> = ({ route, count, contextHook }) => {
   );
 };
 
-interface IPageDataGridPeops {
+interface IPageDataGridProps {
   columns: GridColDef[];
   pageRows: any[];
 }
 
-const PageDataGrid: React.FC<IPageDataGridPeops> = ({ columns, pageRows }) => {
+const PageDataGrid: React.FC<IPageDataGridProps> = ({ columns, pageRows }) => {
   return (
     <GreenCard padding={space.four_space}>
       <DataGrid
         sx={{
           display: "flex",
           flex: 1,
-          //   "& .MuiDataGrid-columnHeader:last-child .MuiDataGrid-columnSeparator":
-          //     {
-          //       display: "none",
-          //     },
         }}
         columns={columns}
         rows={pageRows}
