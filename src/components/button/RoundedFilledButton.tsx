@@ -2,13 +2,13 @@ import Button from "@mui/material/Button";
 import { space } from "../../shared";
 import { useTheme } from "@mui/material";
 
-interface IRoundedButtonProps {
+interface IRoundedFilledButtonProps {
   text: string;
   width?: string;
   handleClick?: () => void;
 }
 
-export const RoundedButton: React.FC<IRoundedButtonProps> = ({
+export const RoundedFilledButton: React.FC<IRoundedFilledButtonProps> = ({
   text,
   width,
   handleClick = () => {},
@@ -23,16 +23,18 @@ export const RoundedButton: React.FC<IRoundedButtonProps> = ({
         width: width ?? "auto",
 
         paddingX: space.five_space,
+        marginBottom: space.two_half_space,
 
         borderColor: "primary.contrastText",
         borderRadius: theme.spacing(5),
 
         fontSize: space.two_half_space,
         fontWeight: 400,
-        color: "primary.contrastText",
 
+        color: "white",
+        backgroundColor: "primary.contrastText",
         ":hover": {
-          backgroundColor: "white",
+          backgroundColor: "secondary.contrastText",
         },
       }}
       onClick={handleClick}

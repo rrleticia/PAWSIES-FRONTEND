@@ -1,13 +1,19 @@
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
-import { Examination, formatDate, space, useInputMask } from "../../shared";
+import {
+  AppointmentStatus,
+  Examination,
+  formatDate,
+  homeColumns,
+  space,
+  useInputMask,
+} from "../../shared";
 import { useEffect, useState } from "react";
 import { useTheme } from "@mui/material/styles";
 import { IAppointment } from "../../models";
 import {
   DateInputBox,
   GreenCard,
-  Logo,
   RoundedFilledTitle,
   RoundedTitle,
   TheoBanner,
@@ -15,10 +21,8 @@ import {
 import Divider from "@mui/material/Divider";
 import Button from "@mui/material/Button";
 import { DataGrid } from "@mui/x-data-grid/DataGrid";
-import {
-  GridColDef,
-  GridValueGetter,
-} from "@mui/x-data-grid/models/colDef/gridColDef";
+import { GridValueGetter } from "@mui/x-data-grid/models/colDef/gridColDef";
+import { GridColumnVisibilityModel } from "@mui/x-data-grid/hooks/features/columns/gridColumnsInterfaces";
 
 export const HomePage = () => {
   return (
@@ -44,13 +48,15 @@ const DatePicker: React.FC<{}> = ({}) => {
   const [hasError, setHasError] = useState<boolean>(false);
 
   return (
-    <GreenCard>
+    <GreenCard alignContent={"auto"} alignItems={"auto"}>
       <Box
         sx={{
           display: "flex",
+          flex: 1,
           borderRadius: theme.spacing(1.5),
           alignItems: "center",
-          marginX: theme.spacing(4),
+          marginLeft: theme.spacing(4),
+          marginRight: theme.spacing(20),
           marginY: theme.spacing(2.5),
           backgroundColor: "white",
         }}
@@ -78,7 +84,7 @@ const DatePicker: React.FC<{}> = ({}) => {
             fontWeight: 400,
             fontSize: "1rem",
             color: "text.primary",
-            paddingX: theme.spacing(4),
+            paddingX: theme.spacing(3),
           }}
         >
           {`CURRENT DATE PICKED: ${datePicked ? date : "NO DATE PICKED"}`}{" "}
@@ -166,7 +172,7 @@ const HomeDashBoard: React.FC<{}> = ({}) => {
       id: "appointment-1",
       date: new Date("2023-07-31"),
       hour: "8:30",
-      status: false,
+      status: AppointmentStatus.IN_PROGRESS,
       examination: Examination.ROUTINE,
       observations: "Observation 1",
       vetID: "vet-5",
@@ -174,12 +180,13 @@ const HomeDashBoard: React.FC<{}> = ({}) => {
       ownerID: "owner-2",
       createdAt: new Date("2024-09-29T01:44:27"),
       updatedAt: new Date("2024-09-29T01:44:27"),
+      pet: {},
     },
     {
       id: "appointment-2",
       date: new Date("2023-10-19"),
       hour: "13:00",
-      status: false,
+      status: AppointmentStatus.IN_PROGRESS,
       examination: Examination.ROUTINE,
       observations: "Observation 2",
       vetID: "vet-2",
@@ -187,12 +194,13 @@ const HomeDashBoard: React.FC<{}> = ({}) => {
       ownerID: "owner-2",
       createdAt: new Date("2024-09-29T01:44:27"),
       updatedAt: new Date("2024-09-29T01:44:27"),
+      pet: {},
     },
     {
       id: "appointment-3",
       date: new Date("2023-03-16"),
       hour: "12:30",
-      status: false,
+      status: AppointmentStatus.CONFIRMED,
       examination: Examination.ROUTINE,
       observations: "Observation 3",
       vetID: "vet-4",
@@ -200,12 +208,13 @@ const HomeDashBoard: React.FC<{}> = ({}) => {
       ownerID: "owner-4",
       createdAt: new Date("2024-09-29T01:44:27"),
       updatedAt: new Date("2024-09-29T01:44:27"),
+      pet: {},
     },
     {
       id: "appointment-4",
       date: new Date("2023-10-22"),
       hour: "10:30",
-      status: true,
+      status: AppointmentStatus.COMPLETED,
       examination: Examination.ROUTINE,
       observations: "Observation 4",
       vetID: "vet-4",
@@ -213,12 +222,13 @@ const HomeDashBoard: React.FC<{}> = ({}) => {
       ownerID: "owner-1",
       createdAt: new Date("2024-09-29T01:44:27"),
       updatedAt: new Date("2024-09-29T01:44:27"),
+      pet: {},
     },
     {
       id: "appointment-5",
       date: new Date("2024-04-15"),
       hour: "17:00",
-      status: false,
+      status: AppointmentStatus.CANCELLED,
       examination: Examination.ROUTINE,
       observations: "Observation 5",
       vetID: "vet-2",
@@ -226,12 +236,17 @@ const HomeDashBoard: React.FC<{}> = ({}) => {
       ownerID: "owner-2",
       createdAt: new Date("2024-09-29T01:44:27"),
       updatedAt: new Date("2024-09-29T01:44:27"),
+      pet: {},
     },
   ];
 
   useEffect(() => {
     setAappointmentRows(appointments);
   }, []);
+
+  const columnVisibilityModel: GridColumnVisibilityModel = {
+    id: false,
+  };
 
   const getPetInfo: GridValueGetter<(typeof appointments)[number], unknown> = (
     value,
@@ -242,115 +257,15 @@ const HomeDashBoard: React.FC<{}> = ({}) => {
     }`;
   };
 
-  const columns: GridColDef[] = [
-    {
-      field: "pet",
-      headerName: "Pet Information",
-      display: "flex",
-      flex: 1,
-      hideable: false,
-    },
-    {
-      field: "date",
-      headerName: "Date",
-      type: "date",
-      display: "flex",
-      flex: 0,
-      hideable: false,
-    },
-    {
-      field: "hour",
-      headerName: "Hour",
-      display: "flex",
-      flex: 0,
-      hideable: false,
-    },
-    {
-      field: "examination",
-      headerName: "Examination",
-      display: "flex",
-      flex: 1,
-      hideable: false,
-    },
-    {
-      field: "status",
-      headerName: "Status",
-      display: "flex",
-      flex: 1,
-      hideable: false,
-    },
-    {
-      field: "observations",
-      headerName: "Observations",
-      display: "flex",
-      flex: 1,
-      hideable: false,
-    },
-    {
-      field: "acoes",
-      type: "actions",
-      headerName: "Operations",
-      display: "flex",
-      flex: 0,
-      cellClassName: "actions",
-      getActions: ({ id }) => {
-        return [
-          <Button
-            variant="contained"
-            size="small"
-            style={{ marginLeft: 16 }}
-            sx={{
-              boxShadow: "none",
-              "&:hover": {
-                boxShadow: "none",
-              },
-            }}
-            onClick={() => {}}
-          >
-            Open
-          </Button>,
-        ];
-      },
-    },
-  ];
-
   return (
     <GreenCard padding={space.four_space}>
       <DataGrid
         sx={{ width: "100%" }}
         hideFooter
         rows={appointmentRows}
-        columns={columns}
+        columns={homeColumns}
+        columnVisibilityModel={columnVisibilityModel}
       ></DataGrid>
-    </GreenCard>
-  );
-};
-
-const HomeBrand: React.FC<{}> = ({}) => {
-  const theme = useTheme();
-
-  return (
-    <GreenCard padding={space.four_space}>
-      <Box
-        sx={{
-          display: "flex",
-          flex: 1,
-          flexDirection: "row",
-          alignItems: "center",
-          justifyContent: "space-between",
-        }}
-      >
-        <Logo />
-        <Box sx={{ display: "flex", justifyContent: "end" }}>
-          <Typography variant="body2" sx={{ paddingRight: theme.spacing(2) }}>
-            a project by Leticia Ramos Rodrigues
-          </Typography>
-          <Typography variant="body2">{"© "}</Typography>
-          <Typography variant="body2" sx={{ paddingLeft: theme.spacing(2) }}>
-            {"2024"}
-          </Typography>
-        </Box>
-      </Box>
     </GreenCard>
   );
 };

@@ -8,6 +8,7 @@ import { space, useAppBarContext } from "../../shared";
 import { AppBarButton } from "../button";
 import { useLayoutEffect, useRef } from "react";
 import { Logo } from "../logo";
+import { useNavigate } from "react-router-dom";
 
 interface IHideOnScrollProps {
   style?: any;
@@ -31,6 +32,7 @@ interface INavAppBarProps {}
 
 export const NavAppBar: React.FC<INavAppBarProps> = ({}) => {
   const theme = useTheme();
+  const navigate = useNavigate();
 
   const myRef = useRef<HTMLDivElement>(null);
   const { handleHeight } = useAppBarContext();
@@ -123,7 +125,7 @@ export const NavAppBar: React.FC<INavAppBarProps> = ({}) => {
               <AppBarButton
                 text={"OWNER"}
                 handleClick={function (): {} {
-                  throw new Error("Function not implemented.");
+                  navigate("/owner");
                 }}
               />
               <AppBarButton

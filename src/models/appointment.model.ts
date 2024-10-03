@@ -1,11 +1,11 @@
-import { Examination } from "../shared";
+import { AppointmentStatus, Examination } from "../shared";
 import { IPet } from ".";
 
 export interface IAppointment {
   id: string;
   date: Date;
   hour: string;
-  status: boolean;
+  status: AppointmentStatus;
   examination: Examination;
   observations: string;
   vetID: string;

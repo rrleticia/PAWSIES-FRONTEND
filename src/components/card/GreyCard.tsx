@@ -1,23 +1,17 @@
 import Card from "@mui/material/Card";
 import { useTheme } from "@mui/material/styles";
 
-interface IGreenCardProps {
-  full?: 1 | 0;
+interface IGreyCardProps {
   minHeight?: string;
   padding?: string;
   flexDirection?: string;
-  alignContent?: string;
-  alignItems?: string;
   children: React.ReactNode;
 }
 
-export const GreenCard: React.FC<IGreenCardProps> = ({
-  full = 0,
+export const GreyCard: React.FC<IGreyCardProps> = ({
   minHeight,
   padding,
   flexDirection,
-  alignContent,
-  alignItems,
   children,
 }) => {
   const theme = useTheme();
@@ -26,8 +20,6 @@ export const GreenCard: React.FC<IGreenCardProps> = ({
       elevation={0}
       sx={{
         display: "flex",
-        flex: full,
-
         flexDirection: flexDirection ?? "row",
 
         minHeight: minHeight ?? "auto",
@@ -35,8 +27,10 @@ export const GreenCard: React.FC<IGreenCardProps> = ({
         marginTop: theme.spacing(4),
         padding: padding ?? 0,
 
-        alignContent: alignContent ?? "center",
-        alignItems: alignItems ?? "center",
+        alignContent: "center",
+        justifyContent: "space-between",
+
+        backgroundColor: "#EDEDED",
 
         borderRadius: theme.spacing(2),
       }}
