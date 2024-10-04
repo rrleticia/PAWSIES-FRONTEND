@@ -2,7 +2,7 @@ import { Typography, useTheme } from "@mui/material";
 import Box from "@mui/material/Box";
 import Card from "@mui/material/Card";
 import CardMedia from "@mui/material/CardMedia";
-import TheoImage from "/assets/Theo.jpg";
+import TheoImage from "../../assets/Theo.jpg";
 import { space, useAppBarContext } from "../../shared";
 import { InputBox, RoundedButton } from "../../components";
 

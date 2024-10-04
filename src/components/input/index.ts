@@ -1,3 +1,3 @@
-export * from "./DateInputBox";
 export * from "./InputBox";
+export * from "./SearchInputBox";
 export * from "./SideInputBox";

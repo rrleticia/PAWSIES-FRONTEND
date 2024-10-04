@@ -12,7 +12,7 @@ import { useEffect, useState } from "react";
 import { useTheme } from "@mui/material/styles";
 import { IAppointment } from "../../models";
 import {
-  DateInputBox,
+  SearchInputBox,
   GreenCard,
   RoundedFilledTitle,
   RoundedTitle,
@@ -23,40 +23,48 @@ import Button from "@mui/material/Button";
 import { DataGrid } from "@mui/x-data-grid/DataGrid";
 import { GridValueGetter } from "@mui/x-data-grid/models/colDef/gridColDef";
 import { GridColumnVisibilityModel } from "@mui/x-data-grid/hooks/features/columns/gridColumnsInterfaces";
+import PetsIcon from "@mui/icons-material/Pets";
+import Icon from "@mui/material/Icon";
 
 export const HomePage = () => {
+  const [date, setDate] = useState<string>("");
   return (
     <Box sx={{ display: "flex", flexDirection: "column", width: "100%" }}>
       <TheoBanner />
-      <DatePicker />
+      <DatePicker date={date} setDate={setDate} />
       <HomeInfo />
       <HomeDashBoard />
     </Box>
   );
 };
 
-const DatePicker: React.FC<{}> = ({}) => {
+interface IDatePickerProps {
+  date: string;
+  setDate: (value: string) => void;
+}
+const DatePicker: React.FC<IDatePickerProps> = ({ date, setDate }) => {
   const theme = useTheme();
   const { currentDate } = useInputMask();
 
   const todayDate = new Date();
 
   const [loading, setLoading] = useState<boolean>(false);
-
-  const [date, setDate] = useState<string>("");
   const [datePicked, setDatePicked] = useState<string>("");
   const [hasError, setHasError] = useState<boolean>(false);
+
+  const handleClick = () => {
+    setLoading(true);
+  };
 
   return (
     <GreenCard alignContent={"auto"} alignItems={"auto"}>
       <Box
         sx={{
           display: "flex",
-          flex: 1,
+          width: "44%",
           borderRadius: theme.spacing(1.5),
           alignItems: "center",
-          marginLeft: theme.spacing(4),
-          marginRight: theme.spacing(20),
+          marginX: theme.spacing(4),
           marginY: theme.spacing(2.5),
           backgroundColor: "white",
         }}
@@ -90,24 +98,39 @@ const DatePicker: React.FC<{}> = ({}) => {
           {`CURRENT DATE PICKED: ${datePicked ? date : "NO DATE PICKED"}`}{" "}
         </Typography>
       </Box>
+
       <Box
         sx={{
           display: "flex",
-          width: "40%",
+          flex: "1",
+          alignItems: "center",
+          justifyContent: "center",
+        }}
+      >
+        <Icon>
+          <PetsIcon sx={{ color: "primary.dark" }}></PetsIcon>
+        </Icon>
+      </Box>
+
+      <Box
+        sx={{
+          display: "flex",
+          width: "45%",
           justifyContent: "center",
           marginX: theme.spacing(4),
           marginTop: theme.spacing(2.5),
         }}
       >
-        <DateInputBox
-          text={"PICK DATE FOR SCHEDULES"}
+        <SearchInputBox
+          name={"home-date"}
+          label={"PICK DATE FOR SCHEDULES"}
           value={date}
           inputRef={currentDate}
           hasError={hasError}
           errorText={hasError ? "Please provide a valid date." : ""}
           handleChange={setDate}
           disabled={loading}
-        ></DateInputBox>
+        ></SearchInputBox>
         <Divider
           orientation="vertical"
           flexItem
@@ -130,6 +153,7 @@ const DatePicker: React.FC<{}> = ({}) => {
             paddingX: theme.spacing(9),
             marginBottom: theme.spacing(2.5),
           }}
+          onClick={handleClick}
         >
           CHOOSE
         </Button>

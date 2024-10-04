@@ -1,5 +1,9 @@
+import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import { GridColDef } from "@mui/x-data-grid/models/colDef/gridColDef";
+import { useMenuState } from "../../hooks";
+import { OptionsMenu } from "../../../components";
+import { useOwnerContext } from "../../contexts";
 
 export const ownerColumns: GridColDef[] = [
   {
@@ -44,24 +48,41 @@ export const ownerColumns: GridColDef[] = [
     type: "actions",
     headerName: "Operations",
     cellClassName: "actions",
-
     getActions: ({ id }) => {
-      return [
-        <Button
-          variant="contained"
-          size="small"
-          style={{ marginLeft: 16 }}
-          sx={{
-            boxShadow: "none",
-            "&:hover": {
-              boxShadow: "none",
-            },
-          }}
-          onClick={() => {}}
-        >
-          Open
-        </Button>,
-      ];
+      const choosenID = id as string;
+      return [<RowMenu id={choosenID}></RowMenu>];
     },
   },
 ];
+
+const RowMenu: React.FC<{ id: string }> = ({ id }) => {
+  const { anchorEl, show, handleClick, handleClose } = useMenuState();
+
+  return (
+    <Box>
+      <Button
+        variant="contained"
+        size="small"
+        style={{ marginLeft: 16 }}
+        sx={{
+          boxShadow: "none",
+          "&:hover": {
+            boxShadow: "none",
+          },
+        }}
+        onClick={handleClick}
+      >
+        OPEN
+      </Button>
+
+      <OptionsMenu
+        choosenID={id}
+        type={"owner"}
+        anchorEl={anchorEl}
+        show={show}
+        handleClose={handleClose}
+        contextHook={useOwnerContext}
+      ></OptionsMenu>
+    </Box>
+  );
+};

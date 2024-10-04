@@ -80,9 +80,7 @@ export const NavAppBar: React.FC<INavAppBarProps> = ({}) => {
             >
               <AppBarButton
                 text={"CLINIC"}
-                handleClick={function (): {} {
-                  throw new Error("Function not implemented.");
-                }}
+                handleClick={() => navigate("/home")}
               />
               <AppBarButton
                 text={"APPOINTMENTS"}
@@ -124,9 +122,7 @@ export const NavAppBar: React.FC<INavAppBarProps> = ({}) => {
               />
               <AppBarButton
                 text={"OWNER"}
-                handleClick={function (): {} {
-                  navigate("/owner");
-                }}
+                handleClick={() => navigate("/owner")}
               />
               <AppBarButton
                 text={"PROFILE"}

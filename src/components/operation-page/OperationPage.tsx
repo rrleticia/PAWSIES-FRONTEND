@@ -1,6 +1,12 @@
 import { useNavigate } from "react-router-dom";
-import { space, validOperation } from "../../shared";
-import { useEffect } from "react";
+import {
+  FormHookType,
+  ModelOperation,
+  OperationType,
+  space,
+  validOperation,
+} from "../../shared";
+import { useEffect, useMemo } from "react";
 import {
   GreenCard,
   GreyCard,
@@ -16,14 +22,18 @@ import Typography from "@mui/material/Typography";
 interface IOperationPageProps<T> {
   minHeight: string;
   route: string;
+  service: any;
   contextHook: () => any;
+  operationForm: () => any;
   children: React.ReactNode;
 }
 
 export const OperationPage = <T,>({
   minHeight,
   route,
+  service,
   contextHook,
+  operationForm,
   children,
 }: IOperationPageProps<T>) => {
   const navigate = useNavigate();
@@ -33,41 +43,96 @@ export const OperationPage = <T,>({
   const { id, operation, handleIDChange, handleOperationChange, resetDefault } =
     contextHook();
 
+  const { valid, formData, verifyErrors, resetForm }: FormHookType =
+    operationForm();
+
   useEffect(() => {
     if (!validOperation(id, operation)) {
+      handleIDChange(undefined);
+      handleOperationChange(undefined);
       resetDefault();
+      resetForm();
       navigate(-1);
     }
   }, [handleIDChange, handleOperationChange]);
 
-  return (
-    <Box
-      sx={{
-        display: "flex",
-        flex: 1,
-        height: "100%",
-        width: "100%",
-        justifyContent: "center",
-      }}
-    >
-      <OperationCard minHeight={minHeight} route={route}></OperationCard>
+  const disabledRegister = useMemo(() => {
+    if (operation == "REGISTER") return false;
+    else return true;
+  }, [handleIDChange, handleOperationChange]);
 
-      <InputCard
-        minHeight={minHeight}
-        route_upper={route_upper}
-        children={children}
-      ></InputCard>
-    </Box>
+  const disabledExisting = useMemo(() => {
+    if (operation == "REGISTER") return true;
+    else return false;
+  }, [handleIDChange, handleOperationChange]);
+
+  const handleSubmit = (event: React.FormEvent) => {
+    event.preventDefault();
+    verifyErrors();
+    if (valid) {
+      const result = ModelOperation(operation, service, id, formData);
+      // exibir alert
+    } else {
+    }
+    handleIDChange(undefined);
+    handleOperationChange(undefined);
+  };
+
+  return (
+    <form onSubmit={handleSubmit}>
+      <Box
+        sx={{
+          display: "flex",
+          flex: 1,
+          height: "100%",
+          width: "100%",
+          justifyContent: "center",
+        }}
+      >
+        <OperationCard
+          minHeight={minHeight}
+          operation={operation}
+          handleOperationChange={handleOperationChange}
+          disabledRegister={disabledRegister}
+          disabledExisting={disabledExisting}
+          resetForm={resetForm}
+        ></OperationCard>
+
+        <InputCard
+          minHeight={minHeight}
+          route_upper={route_upper}
+          children={children}
+        ></InputCard>
+      </Box>
+    </form>
   );
 };
 
 interface IOperationCardProps {
   minHeight: string;
-  route: string;
+  operation: OperationType;
+  handleOperationChange: (value: OperationType) => void;
+  disabledRegister: boolean;
+  disabledExisting: boolean;
+  resetForm: () => void;
 }
 
-const OperationCard: React.FC<IOperationCardProps> = ({ minHeight, route }) => {
+const OperationCard: React.FC<IOperationCardProps> = ({
+  minHeight,
+  operation,
+  handleOperationChange,
+  disabledRegister,
+  disabledExisting,
+  resetForm,
+}) => {
   const theme = useTheme();
+  const navigate = useNavigate();
+
+  const handleBack = () => {
+    resetForm();
+    navigate(-1);
+  };
+
   return (
     <Box
       sx={{
@@ -104,24 +169,38 @@ const OperationCard: React.FC<IOperationCardProps> = ({ minHeight, route }) => {
         />
         <RoundedSwitchButton
           text={"VIEW"}
-          filled={true}
-          disabled={false}
-          handleClick={() => {}}
+          filled={operation == "VIEW"}
+          disabled={disabledExisting}
+          handleClick={() => {
+            if (!disabledExisting) {
+              handleOperationChange("VIEW");
+            }
+          }}
         ></RoundedSwitchButton>
         <RoundedSwitchButton
           text={"REGISTER"}
-          filled={false}
-          disabled={false}
+          filled={operation == "REGISTER"}
+          disabled={disabledRegister}
         ></RoundedSwitchButton>
         <RoundedSwitchButton
-          text={"UPDATE"}
-          filled={false}
-          disabled={false}
+          text={"EDIT"}
+          filled={operation == "EDIT"}
+          disabled={disabledExisting}
+          handleClick={() => {
+            if (!disabledExisting) {
+              handleOperationChange("EDIT");
+            }
+          }}
         ></RoundedSwitchButton>
         <RoundedSwitchButton
           text={"DELETE"}
-          filled={false}
-          disabled={false}
+          filled={operation == "DELETE"}
+          disabled={disabledExisting}
+          handleClick={() => {
+            if (!disabledExisting) {
+              handleOperationChange("DELETE");
+            }
+          }}
         ></RoundedSwitchButton>
         <Box sx={{ display: "flex", flex: 1 }}></Box>
         <Divider
@@ -136,16 +215,19 @@ const OperationCard: React.FC<IOperationCardProps> = ({ minHeight, route }) => {
         <RoundedFilledButton
           text={"CONFIRMAR"}
           width={"80%"}
+          type={"submit"}
         ></RoundedFilledButton>
         <RoundedFilledButton
           text={"CANCELAR"}
           width={"80%"}
-        ></RoundedFilledButton>{" "}
+          handleClick={handleBack}
+        ></RoundedFilledButton>
         <RoundedFilledButton
           text={"VOLTAR"}
           width={"80%"}
+          handleClick={handleBack}
         ></RoundedFilledButton>
-      </GreenCard>{" "}
+      </GreenCard>
     </Box>
   );
 };

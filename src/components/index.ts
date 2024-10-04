@@ -6,6 +6,8 @@ export * from "./input";
 export * from "./list-page";
 export * from "./logo";
 export * from "./media";
+export * from "./menu";
 export * from "./navigation";
 export * from "./operation-page";
+export * from "./search";
 export * from "./title";

@@ -3,7 +3,7 @@ import { useTheme } from "@mui/material/styles";
 
 interface IAppBarButtonProps {
   text: string;
-  handleClick: () => {};
+  handleClick: () => void;
 }
 
 export const AppBarButton: React.FC<IAppBarButtonProps> = ({

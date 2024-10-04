@@ -37,6 +37,7 @@ export const GreenCard: React.FC<IGreenCardProps> = ({
 
         alignContent: alignContent ?? "center",
         alignItems: alignItems ?? "center",
+        justifyContent: "space-between",
 
         borderRadius: theme.spacing(2),
       }}

@@ -6,5 +6,6 @@ export const validOperation = (
 ): boolean => {
   if (!operation) return false;
   else if (operation == "REGISTER" && id) return false;
+  else if (operation != "REGISTER" && !id) return false;
   return true;
 };

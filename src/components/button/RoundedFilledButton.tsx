@@ -4,12 +4,14 @@ import { useTheme } from "@mui/material";
 
 interface IRoundedFilledButtonProps {
   text: string;
+  type?: "button" | "submit";
   width?: string;
   handleClick?: () => void;
 }
 
 export const RoundedFilledButton: React.FC<IRoundedFilledButtonProps> = ({
   text,
+  type,
   width,
   handleClick = () => {},
 }) => {
@@ -37,6 +39,7 @@ export const RoundedFilledButton: React.FC<IRoundedFilledButtonProps> = ({
           backgroundColor: "secondary.contrastText",
         },
       }}
+      type={type}
       onClick={handleClick}
     >
       {text}

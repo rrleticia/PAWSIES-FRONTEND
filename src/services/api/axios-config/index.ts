@@ -1,8 +1,10 @@
-import axios from 'axios';
-import { Environment } from '../../../shared';
+import axios from "axios";
+import { Environment } from "../../../environment";
+
+const env = Environment;
 
 const Api = axios.create({
-  baseURL: Environment.URL_BASE,
+  baseURL: env.URL_BASE,
 });
 
 export { Api };
