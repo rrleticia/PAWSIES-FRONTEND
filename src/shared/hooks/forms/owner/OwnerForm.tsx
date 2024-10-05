@@ -11,8 +11,6 @@ export interface IOwnerHookJson {
 }
 
 export const useOwnerForm = (): FormHookType => {
-  const [valid, setValid] = useState<boolean>(true);
-
   const [formData, setFormData] = useState<IOwnerHookJson>({
     id: "",
     name: "",
@@ -47,10 +45,10 @@ export const useOwnerForm = (): FormHookType => {
   };
 
   const handlePasswordInit = () => {
-    // setFormData({
-    //   ...formData,
-    //   password: "PASSWORD WILL NOT BE SHOWN",
-    // });
+    setFormData((prevFormData) => ({
+      ...prevFormData, // Spread the previous form data to preserve other fields
+      password: "PASSWORD WILL NOT BE SHOWN", // Override only the password field
+    }));
   };
 
   // Validate form data and set errors if any
@@ -60,25 +58,21 @@ export const useOwnerForm = (): FormHookType => {
     });
 
     if (error) {
-      setValid(false);
-      console.log("aqui", valid);
       const newErrors: Partial<Record<keyof IOwnerHookJson, string>> = {};
       error.details.forEach((detail: any) => {
         const field = detail.path[0] as keyof IOwnerHookJson; // Explicitly type the field as keyof IOwnerJson
         newErrors[field] = detail.message; // Assign error message to corresponding field
       });
       setErrors(newErrors); // Set all form errors
+      return false; // Return false if there are validation errors
     } else {
-      setValid(true);
-      // If no errors, clear errors and handle form submission
+      // No errors, clear the errors
       setErrors({});
-      console.log("Form data is valid. Ready for submission:", formData);
+      return true; // Return true if there are no validation errors
     }
-    return valid;
   };
 
   const resetForm = () => {
-    setValid(true);
     setFormData({
       id: "",
       name: "",
@@ -90,7 +84,6 @@ export const useOwnerForm = (): FormHookType => {
   };
 
   return {
-    valid,
     formData,
     handleFormData: setFormData,
     handlePasswordInit,

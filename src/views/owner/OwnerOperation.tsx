@@ -12,7 +12,6 @@ export const OwnerOperation = () => {
   const minHeight = `calc(100% - ${theme.spacing(4)})`;
 
   const {
-    valid,
     formData,
     handleFormData,
     errors,
@@ -28,7 +27,6 @@ export const OwnerOperation = () => {
       route={"owner"}
       contextHook={useOwnerContext}
       operationForm={{
-        valid,
         formData,
         handleFormData,
         errors,

@@ -40,7 +40,7 @@ export const ErrorDialog: React.FC<IErrorDialogProps> = ({
       <DialogContent>
         <DialogContentText id="alert-dialog-description">
           {`The error gave the following description....`}
-          {`${description}.`}
+          {`${description}`}
           {` You will be redirected back to the listing page.`}
         </DialogContentText>
       </DialogContent>{" "}

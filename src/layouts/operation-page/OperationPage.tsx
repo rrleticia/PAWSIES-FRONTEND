@@ -46,8 +46,8 @@ export const OperationPage = <T,>({
     contextHook();
 
   const {
-    valid,
     formData,
+    errors,
     handleFormData,
     handlePasswordInit,
     verifyErrors,
@@ -98,18 +98,15 @@ export const OperationPage = <T,>({
 
   const handleSubmit = async (event: React.FormEvent) => {
     event.preventDefault();
-    verifyErrors();
-    if (valid) {
+
+    if (verifyErrors()) {
       const result = await ModelOperation(operation, service, id, formData);
       if (result instanceof Error) {
-        handleMessageChange(result.message);
+        handleMessageChange(result.message + ".");
         toggleError();
       } else {
         toggleResult();
       }
-    } else {
-      handleMessageChange("Internal server error: Unknown error message. ");
-      toggleError();
     }
   };
 
@@ -152,7 +149,7 @@ export const OperationPage = <T,>({
           toggleCancel={toggleCancel}
           handleCancelation={() => {
             resetForm();
-            handleIDChange();
+            handleIDChange(undefined);
             handleOperationChange(undefined);
             navigate(-1);
           }}
@@ -182,6 +179,7 @@ const OperationCard: React.FC<IOperationCardProps> = ({
   toggleCancel,
 }) => {
   const theme = useTheme();
+  const navigate = useNavigate();
 
   return (
     <Box
@@ -263,15 +261,17 @@ const OperationCard: React.FC<IOperationCardProps> = ({
           }}
         />
         <RoundedFilledButton
-          text={"LIMPAR"}
+          text={operation == "VIEW" ? "VOLTAR" : "LIMPAR"}
           width={"80%"}
           handleClick={() => {
             resetForm();
+            if (operation == "VIEW") navigate(-1);
           }}
         ></RoundedFilledButton>
         <RoundedFilledButton
           text={"CANCELAR"}
           width={"80%"}
+          disabled={operation == "VIEW"}
           handleClick={() => {
             toggleCancel();
           }}
@@ -280,6 +280,7 @@ const OperationCard: React.FC<IOperationCardProps> = ({
           text={"CONFIRMAR"}
           width={"80%"}
           type={"submit"}
+          disabled={operation == "VIEW"}
         ></RoundedFilledButton>
       </GreenCard>
     </Box>

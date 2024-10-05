@@ -6,6 +6,7 @@ interface IRoundedFilledButtonProps {
   text: string;
   type?: "button" | "submit";
   width?: string;
+  disabled?: boolean;
   handleClick?: () => void;
 }
 
@@ -13,6 +14,7 @@ export const RoundedFilledButton: React.FC<IRoundedFilledButtonProps> = ({
   text,
   type,
   width,
+  disabled,
   handleClick = () => {},
 }) => {
   const theme = useTheme();
@@ -38,8 +40,12 @@ export const RoundedFilledButton: React.FC<IRoundedFilledButtonProps> = ({
         ":hover": {
           backgroundColor: "secondary.contrastText",
         },
+        ":disabled": {
+          backgroundColor: "white",
+        },
       }}
       type={type}
+      disabled={disabled}
       onClick={handleClick}
     >
       {text}

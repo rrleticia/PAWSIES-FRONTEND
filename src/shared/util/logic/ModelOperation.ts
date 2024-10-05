@@ -19,7 +19,6 @@ export const ModelOperation = async <T>(
 
 const register = async <T>(service: any, json: any): Promise<T | Error> => {
   const result = await service.create(json);
-  console.log("aaaa", result);
   return result;
 };
 
