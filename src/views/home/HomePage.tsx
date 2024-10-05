@@ -1,13 +1,6 @@
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
-import {
-  AppointmentStatus,
-  Examination,
-  formatDate,
-  homeColumns,
-  space,
-  useInputMask,
-} from "../../shared";
+import { formatDate, homeColumns, space, useInputMask } from "../../shared";
 import { useEffect, useState } from "react";
 import { useTheme } from "@mui/material/styles";
 import { IAppointment } from "../../models";
@@ -28,6 +21,7 @@ import Icon from "@mui/material/Icon";
 
 export const HomePage = () => {
   const [date, setDate] = useState<string>("");
+  console.log();
   return (
     <Box sx={{ display: "flex", flexDirection: "column", width: "100%" }}>
       <TheoBanner />
@@ -191,94 +185,12 @@ const HomeInfo: React.FC<{}> = ({}) => {
 const HomeDashBoard: React.FC<{}> = ({}) => {
   const [appointmentRows, setAappointmentRows] = useState<IAppointment[]>([]);
 
-  const appointments: IAppointment[] = [
-    {
-      id: "appointment-1",
-      date: new Date("2023-07-31"),
-      hour: "8:30",
-      status: AppointmentStatus.IN_PROGRESS,
-      examination: Examination.ROUTINE,
-      observations: "Observation 1",
-      vetID: "vet-5",
-      petID: "pet-3",
-      ownerID: "owner-2",
-      createdAt: new Date("2024-09-29T01:44:27"),
-      updatedAt: new Date("2024-09-29T01:44:27"),
-      pet: {},
-    },
-    {
-      id: "appointment-2",
-      date: new Date("2023-10-19"),
-      hour: "13:00",
-      status: AppointmentStatus.IN_PROGRESS,
-      examination: Examination.ROUTINE,
-      observations: "Observation 2",
-      vetID: "vet-2",
-      petID: "pet-3",
-      ownerID: "owner-2",
-      createdAt: new Date("2024-09-29T01:44:27"),
-      updatedAt: new Date("2024-09-29T01:44:27"),
-      pet: {},
-    },
-    {
-      id: "appointment-3",
-      date: new Date("2023-03-16"),
-      hour: "12:30",
-      status: AppointmentStatus.CONFIRMED,
-      examination: Examination.ROUTINE,
-      observations: "Observation 3",
-      vetID: "vet-4",
-      petID: "pet-2",
-      ownerID: "owner-4",
-      createdAt: new Date("2024-09-29T01:44:27"),
-      updatedAt: new Date("2024-09-29T01:44:27"),
-      pet: {},
-    },
-    {
-      id: "appointment-4",
-      date: new Date("2023-10-22"),
-      hour: "10:30",
-      status: AppointmentStatus.COMPLETED,
-      examination: Examination.ROUTINE,
-      observations: "Observation 4",
-      vetID: "vet-4",
-      petID: "pet-5",
-      ownerID: "owner-1",
-      createdAt: new Date("2024-09-29T01:44:27"),
-      updatedAt: new Date("2024-09-29T01:44:27"),
-      pet: {},
-    },
-    {
-      id: "appointment-5",
-      date: new Date("2024-04-15"),
-      hour: "17:00",
-      status: AppointmentStatus.CANCELLED,
-      examination: Examination.ROUTINE,
-      observations: "Observation 5",
-      vetID: "vet-2",
-      petID: "pet-5",
-      ownerID: "owner-2",
-      createdAt: new Date("2024-09-29T01:44:27"),
-      updatedAt: new Date("2024-09-29T01:44:27"),
-      pet: {},
-    },
-  ];
-
   useEffect(() => {
-    setAappointmentRows(appointments);
+    setAappointmentRows([]);
   }, []);
 
   const columnVisibilityModel: GridColumnVisibilityModel = {
     id: false,
-  };
-
-  const getPetInfo: GridValueGetter<(typeof appointments)[number], unknown> = (
-    value,
-    row
-  ) => {
-    return `${row.pet.name + " - " || ""} ${row.pet.age + " years - " || ""} ${
-      row.pet.breed || ""
-    }`;
   };
 
   return (

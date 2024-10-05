@@ -21,21 +21,34 @@ import { GridToolbarFilterButton } from "@mui/x-data-grid/components/toolbar/Gri
 
 interface IListPageProps<T> {
   route: string;
+  service: any;
   columns: GridColDef[];
   contextHook: () => any;
 }
 
 export const ListPage = <T,>({
   route,
+  service,
   columns,
   contextHook,
 }: IListPageProps<T>) => {
+  const [loading, setLoading] = useState<boolean>(false);
   const [rows, setRows] = useState<T[]>([]);
   const [count, setCount] = useState<Number>(0);
 
+  const getRows = async () => {
+    const result = await service.getAll();
+    if (result instanceof Error) {
+    } else {
+      setRows(result);
+      setCount(rows.length);
+    }
+  };
+
   useEffect(() => {
-    setRows([]);
-    setCount(rows.length);
+    setLoading(true);
+    getRows();
+    setLoading(false);
   }, []);
 
   return (

@@ -8,7 +8,7 @@ export const ModelOperation = async <T>(
 ): Promise<T | Error> => {
   if (id) {
     if (operation == "VIEW") return await view(service, id);
-    if (operation == "EDIT") return await edit(service, id, json);
+    if (operation == "EDIT") return await edit(service, json);
     if (operation == "DELETE") return await remove(service, id);
   }
   if (json) {
@@ -17,42 +17,23 @@ export const ModelOperation = async <T>(
   return new Error("Error during operation: Uknown error.");
 };
 
-const register = async <T>(service: any, json: any): Promise<T> => {
-  try {
-    const result = await service.create(json);
-    return result;
-  } catch (error) {
-    console.error("Error during registration:", error);
-    throw error;
-  }
+const register = async <T>(service: any, json: any): Promise<T | Error> => {
+  const result = await service.create(json);
+  console.log("aaaa", result);
+  return result;
 };
 
-const view = async <T>(service: any, id: string): Promise<T> => {
-  try {
-    const result = await service.getOne(id);
-    return result;
-  } catch (error) {
-    console.error("Error during view:", error);
-    throw error;
-  }
+const view = async <T>(service: any, id: string): Promise<T | Error> => {
+  const result = await service.getOne(id);
+  return result;
 };
 
-const edit = async <T>(service: any, id: string, json: any): Promise<T> => {
-  try {
-    const result = await service.update(id, json);
-    return result;
-  } catch (error) {
-    console.error("Error during editing:", error);
-    throw error;
-  }
+const edit = async <T>(service: any, json: any): Promise<T | Error> => {
+  const result = await service.update(json);
+  return result;
 };
 
-const remove = async <T>(service: any, id: string): Promise<T> => {
-  try {
-    const result = await service.delete(id);
-    return result;
-  } catch (error) {
-    console.error("Error during removal:", error);
-    throw error;
-  }
+const remove = async <T>(service: any, id: string): Promise<T | Error> => {
+  const result = await service.remove(id);
+  return result;
 };

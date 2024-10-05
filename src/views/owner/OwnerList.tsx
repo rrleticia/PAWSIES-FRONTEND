@@ -1,11 +1,13 @@
-import { ListPage } from "../../components";
+import { ListPage } from "../../layouts";
 import { ownerColumns, useOwnerContext } from "../../shared";
 import { IOwner } from "../../models";
+import { OwnerService } from "../../services";
 
 export const OwnerList = () => {
   return (
     <ListPage<IOwner>
       route={"owner"}
+      service={OwnerService}
       columns={ownerColumns}
       contextHook={useOwnerContext}
     ></ListPage>

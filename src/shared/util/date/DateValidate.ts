@@ -5,7 +5,11 @@ export const validateExpireStringDate = (value: string) => {
 };
 
 export const validateExpireStoredStringDate = (value: string) => {
-  const date = new Date(JSON.parse(value));
-  if (date > new Date()) return true;
-  return false;
+  const expirationDate = new Date(JSON.parse(value));
+
+  // Get the current date
+  const currentDate = new Date();
+
+  // Compare current date with expiration date
+  return currentDate <= expirationDate;
 };

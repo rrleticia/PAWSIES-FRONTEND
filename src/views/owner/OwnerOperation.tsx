@@ -1,22 +1,42 @@
 import Box from "@mui/material/Box";
-import { InputBox, OperationPage, SideInputBox } from "../../components";
+import { InputBox, SideInputBox } from "../../components";
 import { IOwner } from "../../models";
-import { useOwnerContext } from "../../shared";
+import { IOwnerHookJson, useOwnerContext, useOwnerForm } from "../../shared";
 import { useTheme } from "@mui/material/styles";
 import { OwnerService } from "../../services";
-import { IOwnerHookJson, useOwnerForm } from "../../shared/hooks/forms";
+import { OperationPage } from "../../layouts";
+import { useMemo } from "react";
 
 export const OwnerOperation = () => {
   const theme = useTheme();
   const minHeight = `calc(100% - ${theme.spacing(4)})`;
-  const { formData, errors, handleInputChange } = useOwnerForm();
+
+  const {
+    valid,
+    formData,
+    handleFormData,
+    errors,
+    handleInputChange,
+    handlePasswordInit,
+    verifyErrors,
+    resetForm,
+  } = useOwnerForm();
 
   return (
     <OperationPage<IOwner>
       minHeight={minHeight}
       route={"owner"}
       contextHook={useOwnerContext}
-      operationForm={useOwnerForm}
+      operationForm={{
+        valid,
+        formData,
+        handleFormData,
+        errors,
+        handleInputChange,
+        handlePasswordInit,
+        verifyErrors,
+        resetForm,
+      }}
       children={
         <OwnerInput
           formData={formData}
@@ -40,6 +60,10 @@ const OwnerInput: React.FC<IOwnerInputProps> = ({
   handleInputChange,
   errors,
 }) => {
+  const { operation } = useOwnerContext();
+
+  const disabled: boolean = useMemo(() => operation == "VIEW", [operation]);
+
   return (
     <>
       <InputBox
@@ -49,6 +73,7 @@ const OwnerInput: React.FC<IOwnerInputProps> = ({
         hasError={Boolean(errors.name)}
         errorText={errors.name || ""}
         handleChange={handleInputChange}
+        disabled={disabled}
       ></InputBox>
       <InputBox
         name={"email"}
@@ -57,6 +82,7 @@ const OwnerInput: React.FC<IOwnerInputProps> = ({
         hasError={Boolean(errors.email)}
         errorText={errors.email || ""}
         handleChange={handleInputChange}
+        disabled={disabled}
       ></InputBox>
       <Box sx={{ display: "flex", flexDirection: "row", width: "100%" }}>
         <SideInputBox side={"left"}>
@@ -67,6 +93,7 @@ const OwnerInput: React.FC<IOwnerInputProps> = ({
             hasError={Boolean(errors.username)}
             errorText={errors.username || ""}
             handleChange={handleInputChange}
+            disabled={disabled}
           ></InputBox>
         </SideInputBox>
         <SideInputBox side={"right"}>
@@ -77,6 +104,7 @@ const OwnerInput: React.FC<IOwnerInputProps> = ({
             hasError={Boolean(errors.password)}
             errorText={errors.password || ""}
             handleChange={handleInputChange}
+            disabled={disabled}
           ></InputBox>
         </SideInputBox>
       </Box>

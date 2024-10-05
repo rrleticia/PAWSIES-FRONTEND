@@ -4,6 +4,7 @@ import {
   ModelOperation,
   OperationType,
   space,
+  useOperationDialog,
   validOperation,
 } from "../../shared";
 import { useEffect, useMemo } from "react";
@@ -18,13 +19,14 @@ import Box from "@mui/material/Box";
 import { useTheme } from "@mui/material/styles";
 import Divider from "@mui/material/Divider";
 import Typography from "@mui/material/Typography";
+import { OperationDialog } from "./OperationDialog";
 
 interface IOperationPageProps<T> {
   minHeight: string;
   route: string;
   service: any;
   contextHook: () => any;
-  operationForm: () => any;
+  operationForm: FormHookType;
   children: React.ReactNode;
 }
 
@@ -43,16 +45,44 @@ export const OperationPage = <T,>({
   const { id, operation, handleIDChange, handleOperationChange, resetDefault } =
     contextHook();
 
-  const { valid, formData, verifyErrors, resetForm }: FormHookType =
-    operationForm();
+  const {
+    valid,
+    formData,
+    handleFormData,
+    handlePasswordInit,
+    verifyErrors,
+    resetForm,
+  }: FormHookType = operationForm;
+
+  const {
+    openResult,
+    toggleResult,
+    openError,
+    toggleError,
+    errorMessage,
+    handleMessageChange,
+    openCancel,
+    toggleCancel,
+  } = useOperationDialog();
+
+  const handleInit = async () => {
+    const result = await service.getOne(id);
+    if (result instanceof Error) {
+    } else {
+      handleFormData(result);
+      handlePasswordInit();
+    }
+  };
 
   useEffect(() => {
     if (!validOperation(id, operation)) {
-      handleIDChange(undefined);
-      handleOperationChange(undefined);
       resetDefault();
       resetForm();
       navigate(-1);
+    } else {
+      if (operation != "REGISTER") {
+        handleInit();
+      }
     }
   }, [handleIDChange, handleOperationChange]);
 
@@ -66,16 +96,21 @@ export const OperationPage = <T,>({
     else return false;
   }, [handleIDChange, handleOperationChange]);
 
-  const handleSubmit = (event: React.FormEvent) => {
+  const handleSubmit = async (event: React.FormEvent) => {
     event.preventDefault();
     verifyErrors();
     if (valid) {
-      const result = ModelOperation(operation, service, id, formData);
-      // exibir alert
+      const result = await ModelOperation(operation, service, id, formData);
+      if (result instanceof Error) {
+        handleMessageChange(result.message);
+        toggleError();
+      } else {
+        toggleResult();
+      }
     } else {
+      handleMessageChange("Internal server error: Unknown error message. ");
+      toggleError();
     }
-    handleIDChange(undefined);
-    handleOperationChange(undefined);
   };
 
   return (
@@ -96,6 +131,7 @@ export const OperationPage = <T,>({
           disabledRegister={disabledRegister}
           disabledExisting={disabledExisting}
           resetForm={resetForm}
+          toggleCancel={toggleCancel}
         ></OperationCard>
 
         <InputCard
@@ -103,6 +139,24 @@ export const OperationPage = <T,>({
           route_upper={route_upper}
           children={children}
         ></InputCard>
+
+        <OperationDialog
+          model={route}
+          operation={operation}
+          description={errorMessage}
+          openResult={openResult}
+          toggleResult={toggleResult}
+          openError={openError}
+          toggleError={toggleError}
+          openCancel={openCancel}
+          toggleCancel={toggleCancel}
+          handleCancelation={() => {
+            resetForm();
+            handleIDChange();
+            handleOperationChange(undefined);
+            navigate(-1);
+          }}
+        ></OperationDialog>
       </Box>
     </form>
   );
@@ -115,6 +169,7 @@ interface IOperationCardProps {
   disabledRegister: boolean;
   disabledExisting: boolean;
   resetForm: () => void;
+  toggleCancel: () => void;
 }
 
 const OperationCard: React.FC<IOperationCardProps> = ({
@@ -124,14 +179,9 @@ const OperationCard: React.FC<IOperationCardProps> = ({
   disabledRegister,
   disabledExisting,
   resetForm,
+  toggleCancel,
 }) => {
   const theme = useTheme();
-  const navigate = useNavigate();
-
-  const handleBack = () => {
-    resetForm();
-    navigate(-1);
-  };
 
   return (
     <Box
@@ -213,19 +263,23 @@ const OperationCard: React.FC<IOperationCardProps> = ({
           }}
         />
         <RoundedFilledButton
-          text={"CONFIRMAR"}
+          text={"LIMPAR"}
           width={"80%"}
-          type={"submit"}
+          handleClick={() => {
+            resetForm();
+          }}
         ></RoundedFilledButton>
         <RoundedFilledButton
           text={"CANCELAR"}
           width={"80%"}
-          handleClick={handleBack}
+          handleClick={() => {
+            toggleCancel();
+          }}
         ></RoundedFilledButton>
         <RoundedFilledButton
-          text={"VOLTAR"}
+          text={"CONFIRMAR"}
           width={"80%"}
-          handleClick={handleBack}
+          type={"submit"}
         ></RoundedFilledButton>
       </GreenCard>
     </Box>

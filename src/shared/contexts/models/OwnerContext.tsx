@@ -20,7 +20,7 @@ export const OwnerProvider: React.FC<IOwnerProviderProps> = ({ children }) => {
   const [currentID, setCurrentID] = useState<string | undefined>();
   const [currentOperation, setCurrentOperation] = useState<
     OperationType | undefined
-  >();
+  >("VIEW");
 
   const resetDefault = (): void => {
     setCurrentID(undefined);

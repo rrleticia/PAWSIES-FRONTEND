@@ -29,7 +29,7 @@ export const OptionsMenu: React.FC<IOptionsMenuProps> = ({
   const { operation, handleIDChange, handleOperationChange } = contextHook();
 
   const handleClick = (choosenOperation: OperationType) => {
-    if (operation != "VIEW") {
+    if (operation != "REGISTER") {
       handleIDChange(choosenID);
     }
     handleOperationChange(choosenOperation);

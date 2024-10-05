@@ -1,7 +1,7 @@
-import { Role } from "../shared";
+import { IUser } from "./user.model";
 
-export interface ILoginUser {
-  role: Role;
-  email: string;
-  password?: string;
+export interface ILogin {
+  token: string;
+  loggedUser: IUser;
+  expiresIn: string;
 }

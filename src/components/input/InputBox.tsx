@@ -37,6 +37,9 @@ export const InputBox: React.FC<IInputBoxProps> = ({
         "& label.Mui-focused": {
           color: "primary.contrastText",
         },
+        "& .MuiInputBase-input.Mui-disabled": {
+          WebkitTextFillColor: "#a3a7b6",
+        },
       }}
       slotProps={{
         inputLabel: {

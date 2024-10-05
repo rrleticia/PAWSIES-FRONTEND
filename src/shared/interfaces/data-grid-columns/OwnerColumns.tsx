@@ -1,9 +1,19 @@
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
-import { GridColDef } from "@mui/x-data-grid/models/colDef/gridColDef";
+import {
+  GridColDef,
+  GridValueGetter,
+} from "@mui/x-data-grid/models/colDef/gridColDef";
 import { useMenuState } from "../../hooks";
 import { OptionsMenu } from "../../../components";
 import { useOwnerContext } from "../../contexts";
+
+const getDateTransform: GridValueGetter<any[number], unknown> = (
+  value,
+  row
+) => {
+  return new Date(row.createdAt);
+};
 
 export const ownerColumns: GridColDef[] = [
   {
@@ -34,12 +44,13 @@ export const ownerColumns: GridColDef[] = [
     display: "flex",
     flex: 1,
     hideable: false,
+    valueGetter: getDateTransform,
   },
   {
     field: "ownerID",
     headerName: "OwnerID",
     display: "flex",
-    flex: 0,
+    flex: 1,
     hideable: false,
   },
 

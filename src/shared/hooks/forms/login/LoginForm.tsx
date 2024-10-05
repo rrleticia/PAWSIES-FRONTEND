@@ -2,30 +2,22 @@ import { useState } from "react";
 import { Validators } from "../../../schemas"; // Joi schema
 import { FormHookType } from "../../../interfaces";
 
-export interface IOwnerHookJson {
-  id: string;
-  name: string;
-  username: string;
+export interface ILoginHookJson {
   email: string;
   password: string;
 }
 
-export const useOwnerForm = (): FormHookType => {
+export const useLoginForm = (): FormHookType => {
   const [valid, setValid] = useState<boolean>(true);
 
-  const [formData, setFormData] = useState<IOwnerHookJson>({
-    id: "",
-    name: "",
-    username: "",
+  const [formData, setFormData] = useState<ILoginHookJson>({
     email: "",
     password: "",
   });
 
   const [errors, setErrors] = useState<
-    Partial<Record<keyof IOwnerHookJson, string>>
+    Partial<Record<keyof ILoginHookJson, string>>
   >({
-    name: "",
-    username: "",
     email: "",
     password: "",
   });
@@ -46,25 +38,17 @@ export const useOwnerForm = (): FormHookType => {
     });
   };
 
-  const handlePasswordInit = () => {
-    // setFormData({
-    //   ...formData,
-    //   password: "PASSWORD WILL NOT BE SHOWN",
-    // });
-  };
-
   // Validate form data and set errors if any
   const verifyErrors = () => {
-    const { error } = Validators["OwnerSchema"].validate(formData, {
+    const { error } = Validators["LoginSchema"].validate(formData, {
       abortEarly: false, // Collect all errors
     });
 
     if (error) {
       setValid(false);
-      console.log("aqui", valid);
-      const newErrors: Partial<Record<keyof IOwnerHookJson, string>> = {};
+      const newErrors: Partial<Record<keyof ILoginHookJson, string>> = {};
       error.details.forEach((detail: any) => {
-        const field = detail.path[0] as keyof IOwnerHookJson; // Explicitly type the field as keyof IOwnerJson
+        const field = detail.path[0] as keyof ILoginHookJson; // Explicitly type the field as keyof ILoginJson
         newErrors[field] = detail.message; // Assign error message to corresponding field
       });
       setErrors(newErrors); // Set all form errors
@@ -73,16 +57,13 @@ export const useOwnerForm = (): FormHookType => {
       // If no errors, clear errors and handle form submission
       setErrors({});
       console.log("Form data is valid. Ready for submission:", formData);
+      // Proceed with form submission logic, e.g., API call
     }
-    return valid;
   };
 
   const resetForm = () => {
     setValid(true);
     setFormData({
-      id: "",
-      name: "",
-      username: "",
       email: "",
       password: "",
     });
@@ -92,8 +73,6 @@ export const useOwnerForm = (): FormHookType => {
   return {
     valid,
     formData,
-    handleFormData: setFormData,
-    handlePasswordInit,
     errors,
     handleInputChange,
     verifyErrors,

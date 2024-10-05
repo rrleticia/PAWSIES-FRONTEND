@@ -1,10 +1,19 @@
-import { GridColDef } from "@mui/x-data-grid/models/colDef/gridColDef";
+import {
+  GridColDef,
+  GridValueGetter,
+} from "@mui/x-data-grid/models/colDef/gridColDef";
 import {
   renderEditStatus,
   renderStatus,
   STATUS_OPTIONS,
 } from "../../../components";
 import Button from "@mui/material/Button";
+
+const getPetInfo: GridValueGetter<any[number], unknown> = (value, row) => {
+  return `${row.pet.name + " - " || ""} ${row.pet.age + " years - " || ""} ${
+    row.pet.breed || ""
+  }`;
+};
 
 export const homeColumns: GridColDef[] = [
   {
@@ -22,6 +31,7 @@ export const homeColumns: GridColDef[] = [
     display: "flex",
     flex: 1,
     hideable: false,
+    valueGetter: getPetInfo,
   },
   {
     field: "date",
