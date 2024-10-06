@@ -1,6 +1,5 @@
 import { ListPage } from "../../layouts";
-import { ownerColumns, useOwnerContext } from "../../shared";
-import { IOwner } from "../../models";
+import { IOwner, ownerColumns, useOwnerContext } from "../../shared";
 import { OwnerService } from "../../services";
 
 export const OwnerList = () => {

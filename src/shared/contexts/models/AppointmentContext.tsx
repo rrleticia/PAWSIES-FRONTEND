@@ -1,8 +1,7 @@
-
 import { createContext, useContext, useState } from "react";
 import { OperationType } from "../../interfaces";
 
-interface IOwnerContextData {
+interface IAppointmentContextData {
   id: string | "NONE";
   operation: OperationType | "NONE";
   handleIDChange: (value: string | "NONE") => void;
@@ -10,13 +9,13 @@ interface IOwnerContextData {
   resetDefault: () => void;
 }
 
-const OwnerContext = createContext({} as IOwnerContextData);
+const AppointmentContext = createContext({} as IAppointmentContextData);
 
-interface IOwnerProviderProps {
+interface IAppointmentProviderProps {
   children: React.ReactNode;
 }
 
-export const OwnerProvider: React.FC<IOwnerProviderProps> = ({ children }) => {
+export const AppointmentProvider: React.FC<IAppointmentProviderProps> = ({ children }) => {
   const [currentID, setCurrentID] = useState<string | "NONE">("NONE");
   const [currentOperation, setCurrentOperation] = useState<
     OperationType | "NONE"
@@ -28,7 +27,7 @@ export const OwnerProvider: React.FC<IOwnerProviderProps> = ({ children }) => {
   };
 
   return (
-    <OwnerContext.Provider
+    <AppointmentContext.Provider
       value={{
         id: currentID,
         operation: currentOperation,
@@ -38,8 +37,8 @@ export const OwnerProvider: React.FC<IOwnerProviderProps> = ({ children }) => {
       }}
     >
       {children}
-    </OwnerContext.Provider>
+    </AppointmentContext.Provider>
   );
 };
 
-export const useOwnerContext = () => useContext(OwnerContext);
+export const useAppointmentContext = () => useContext(AppointmentContext);

@@ -1,8 +1,7 @@
-
 import { createContext, useContext, useState } from "react";
 import { OperationType } from "../../interfaces";
 
-interface IOwnerContextData {
+interface IVetContextData {
   id: string | "NONE";
   operation: OperationType | "NONE";
   handleIDChange: (value: string | "NONE") => void;
@@ -10,13 +9,13 @@ interface IOwnerContextData {
   resetDefault: () => void;
 }
 
-const OwnerContext = createContext({} as IOwnerContextData);
+const VetContext = createContext({} as IVetContextData);
 
-interface IOwnerProviderProps {
+interface IVetProviderProps {
   children: React.ReactNode;
 }
 
-export const OwnerProvider: React.FC<IOwnerProviderProps> = ({ children }) => {
+export const VetProvider: React.FC<IVetProviderProps> = ({ children }) => {
   const [currentID, setCurrentID] = useState<string | "NONE">("NONE");
   const [currentOperation, setCurrentOperation] = useState<
     OperationType | "NONE"
@@ -28,7 +27,7 @@ export const OwnerProvider: React.FC<IOwnerProviderProps> = ({ children }) => {
   };
 
   return (
-    <OwnerContext.Provider
+    <VetContext.Provider
       value={{
         id: currentID,
         operation: currentOperation,
@@ -38,8 +37,8 @@ export const OwnerProvider: React.FC<IOwnerProviderProps> = ({ children }) => {
       }}
     >
       {children}
-    </OwnerContext.Provider>
+    </VetContext.Provider>
   );
 };
 
-export const useOwnerContext = () => useContext(OwnerContext);
+export const useVetContext = () => useContext(VetContext);

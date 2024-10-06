@@ -70,7 +70,12 @@ export const OperationPage = <T,>({
     if (result instanceof Error) {
     } else {
       handleFormData(result);
-      handlePasswordInit();
+      if (
+        (route == "vet" || route == "owner" || route == "user") &&
+        handlePasswordInit
+      ) {
+        handlePasswordInit();
+      }
     }
   };
 
@@ -149,8 +154,8 @@ export const OperationPage = <T,>({
           toggleCancel={toggleCancel}
           handleCancelation={() => {
             resetForm();
-            handleIDChange(undefined);
-            handleOperationChange(undefined);
+            handleIDChange("NONE");
+            handleOperationChange("NONE");
             navigate(-1);
           }}
         ></OperationDialog>

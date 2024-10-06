@@ -1,9 +1,14 @@
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
-import { formatDate, homeColumns, space, useInputMask } from "../../shared";
+import {
+  formatDate,
+  homeColumns,
+  IAppointment,
+  space,
+  useInputMask,
+} from "../../shared";
 import { useEffect, useState } from "react";
 import { useTheme } from "@mui/material/styles";
-import { IAppointment } from "../../models";
 import {
   SearchInputBox,
   GreenCard,
@@ -14,7 +19,6 @@ import {
 import Divider from "@mui/material/Divider";
 import Button from "@mui/material/Button";
 import { DataGrid } from "@mui/x-data-grid/DataGrid";
-import { GridValueGetter } from "@mui/x-data-grid/models/colDef/gridColDef";
 import { GridColumnVisibilityModel } from "@mui/x-data-grid/hooks/features/columns/gridColumnsInterfaces";
 import PetsIcon from "@mui/icons-material/Pets";
 import Icon from "@mui/material/Icon";
@@ -36,9 +40,10 @@ interface IDatePickerProps {
   date: string;
   setDate: (value: string) => void;
 }
+
 const DatePicker: React.FC<IDatePickerProps> = ({ date, setDate }) => {
   const theme = useTheme();
-  const { currentDate } = useInputMask();
+  const { dateRef } = useInputMask();
 
   const todayDate = new Date();
 
@@ -119,7 +124,7 @@ const DatePicker: React.FC<IDatePickerProps> = ({ date, setDate }) => {
           name={"home-date"}
           label={"PICK DATE FOR SCHEDULES"}
           value={date}
-          inputRef={currentDate}
+          inputRef={dateRef}
           hasError={hasError}
           errorText={hasError ? "Please provide a valid date." : ""}
           handleChange={setDate}

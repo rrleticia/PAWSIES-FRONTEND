@@ -79,7 +79,8 @@ export const SearchInput: React.FC<ISearchInputProps> = ({
             }}
           >
             <SearchInputBox
-              text={`PICK A/AN ${route_upper} ID`}
+              name={route + "-search"}
+              label={`PICK A/AN ${route_upper} ID`}
               value={id}
               hasError={hasError}
               errorText={hasError ? "Please provide a valid id." : ""}

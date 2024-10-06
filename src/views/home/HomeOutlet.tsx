@@ -1,6 +1,13 @@
 import { FooterBrand, NavAppBar } from "../../components";
 import { Outlet } from "react-router-dom";
-import { AppBarProvider, OwnerProvider, space } from "../../shared";
+import {
+  AppBarProvider,
+  AppointmentProvider,
+  OwnerProvider,
+  PetProvider,
+  space,
+  VetProvider,
+} from "../../shared";
 import Box from "@mui/material/Box";
 
 export const HomeOutlet = () => {
@@ -8,22 +15,28 @@ export const HomeOutlet = () => {
   return (
     <AppBarProvider>
       <OwnerProvider>
-        <Box
-          sx={{
-            display: "flex",
-            flexDirection: "column",
-            minHeight: minHeight,
+        <VetProvider>
+          <PetProvider>
+            <AppointmentProvider>
+              <Box
+                sx={{
+                  display: "flex",
+                  flexDirection: "column",
+                  minHeight: minHeight,
 
-            justifyContent: "space-between",
-          }}
-        >
-          <>
-            <NavAppBar />
-            <Outlet />
-          </>
+                  justifyContent: "space-between",
+                }}
+              >
+                <>
+                  <NavAppBar />
+                  <Outlet />
+                </>
 
-          <FooterBrand />
-        </Box>
+                <FooterBrand />
+              </Box>
+            </AppointmentProvider>
+          </PetProvider>
+        </VetProvider>
       </OwnerProvider>
     </AppBarProvider>
   );

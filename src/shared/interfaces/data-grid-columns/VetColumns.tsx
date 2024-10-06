@@ -3,10 +3,10 @@ import Button from "@mui/material/Button";
 import { GridColDef } from "@mui/x-data-grid/models/colDef/gridColDef";
 import { useMenuState } from "../../hooks";
 import { OptionsMenu } from "../../../components";
-import { useOwnerContext } from "../../contexts";
+import { useVetContext } from "../../contexts";
 import { getDateTransform } from "../../util";
 
-export const ownerColumns: GridColDef[] = [
+export const vetColumns: GridColDef[] = [
   {
     field: "id",
     headerName: "ID",
@@ -29,6 +29,13 @@ export const ownerColumns: GridColDef[] = [
     hideable: false,
   },
   {
+    field: "specialty",
+    headerName: "Specialty",
+    display: "flex",
+    flex: 1,
+    hideable: false,
+  },
+  {
     field: "email",
     headerName: "E-mail",
     display: "flex",
@@ -45,8 +52,8 @@ export const ownerColumns: GridColDef[] = [
     valueGetter: getDateTransform,
   },
   {
-    field: "ownerID",
-    headerName: "OwnerID",
+    field: "vetID",
+    headerName: "VetID",
     display: "flex",
     flex: 1,
     hideable: false,
@@ -90,7 +97,7 @@ const RowMenu: React.FC<{ id: string }> = ({ id }) => {
         anchorEl={anchorEl}
         show={show}
         handleClose={handleClose}
-        contextHook={useOwnerContext}
+        contextHook={useVetContext}
       ></OptionsMenu>
     </Box>
   );

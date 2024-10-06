@@ -3,10 +3,10 @@ import Button from "@mui/material/Button";
 import { GridColDef } from "@mui/x-data-grid/models/colDef/gridColDef";
 import { useMenuState } from "../../hooks";
 import { OptionsMenu } from "../../../components";
-import { useOwnerContext } from "../../contexts";
+import { usePetContext } from "../../contexts";
 import { getDateTransform } from "../../util";
 
-export const ownerColumns: GridColDef[] = [
+export const petColumns: GridColDef[] = [
   {
     field: "id",
     headerName: "ID",
@@ -22,22 +22,43 @@ export const ownerColumns: GridColDef[] = [
     hideable: false,
   },
   {
-    field: "username",
-    headerName: "Username",
+    field: "type",
+    headerName: "Type",
     display: "flex",
     flex: 1,
     hideable: false,
   },
   {
-    field: "email",
-    headerName: "E-mail",
+    field: "color",
+    headerName: "Color",
+    display: "flex",
+    flex: 1,
+    hideable: false,
+  },
+  {
+    field: "breed",
+    headerName: "Breed",
+    display: "flex",
+    flex: 1,
+    hideable: false,
+  },
+  {
+    field: "age",
+    headerName: "Age",
+    display: "flex",
+    flex: 1,
+    hideable: false,
+  },
+  {
+    field: "weight",
+    headerName: "Weight",
     display: "flex",
     flex: 1,
     hideable: false,
   },
   {
     field: "createdAt",
-    headerName: "Creation Date",
+    headerName: "createdAt",
     type: "date",
     display: "flex",
     flex: 1,
@@ -90,7 +111,7 @@ const RowMenu: React.FC<{ id: string }> = ({ id }) => {
         anchorEl={anchorEl}
         show={show}
         handleClose={handleClose}
-        contextHook={useOwnerContext}
+        contextHook={usePetContext}
       ></OptionsMenu>
     </Box>
   );

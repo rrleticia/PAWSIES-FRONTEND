@@ -67,7 +67,7 @@ interface ISearchByIDProps<T> {
 
 const SearchByID = <T,>({ route, setRows }: ISearchByIDProps<T>) => {
   if (route == "pet" || route == "appointment")
-    return <SearchInput route={"pet"} setRows={setRows}></SearchInput>;
+    return <SearchInput route={route} setRows={setRows}></SearchInput>;
 };
 
 interface IPageInfoProps {
@@ -79,10 +79,11 @@ interface IPageInfoProps {
 const PageInfo: React.FC<IPageInfoProps> = ({ route, count, contextHook }) => {
   const theme = useTheme();
   const navigate = useNavigate();
+
   const { handleIDChange, handleOperationChange } = contextHook();
 
   const handleNewPage = (): void => {
-    handleIDChange(undefined);
+    handleIDChange("NONE");
     handleOperationChange("REGISTER");
     navigate(`/${route}/operation`);
   };
