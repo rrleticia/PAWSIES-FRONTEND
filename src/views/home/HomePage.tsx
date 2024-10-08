@@ -119,7 +119,6 @@ const DatePicker: React.FC<IDatePickerProps> = ({
     if (validateString(date)) {
       setHasError(false);
       const result = filterByDate(appointmentRows, date);
-      console.log(result);
       setAppointmentRows(result);
       setCount(result.length);
       setCompleted(result.map((a) => a.status == "COMPLETED").length);

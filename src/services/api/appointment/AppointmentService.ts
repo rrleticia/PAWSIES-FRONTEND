@@ -21,7 +21,7 @@ const getAll = async (): Promise<IAppointment[] | Error> => {
   }
 };
 
-const getAllByPetID = async (id: string): Promise<IAppointment[] | Error> => {
+const search = async (id: string): Promise<IAppointment[] | Error> => {
   try {
     const { data } = await Api.get(`/appointment/${id}`);
 
@@ -166,7 +166,7 @@ const remove = async (id: string): Promise<IAppointment | Error> => {
 
 export const AppointmentService = {
   getAll,
-  getAllByPetID,
+  search,
   getAllByDate,
   getOne,
   create,

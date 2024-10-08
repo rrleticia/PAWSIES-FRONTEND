@@ -120,9 +120,7 @@ export const NavAppBar: React.FC<INavAppBarProps> = ({}) => {
               />
               <AppBarButton
                 text={"PROFILE"}
-                handleClick={function (): {} {
-                  throw new Error("Function not implemented.");
-                }}
+                handleClick={() => navigate("/profile")}
               />
             </Container>
           </Toolbar>

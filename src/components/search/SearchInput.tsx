@@ -12,15 +12,23 @@ import Card from "@mui/material/Card";
 interface ISearchInputProps {
   route: string;
   setRows: (value: any[]) => void;
+  service: any;
 }
 
 export const SearchInput: React.FC<ISearchInputProps> = ({
   route,
   setRows,
+  service,
 }) => {
   const theme = useTheme();
 
   const route_upper = route.toUpperCase();
+
+  const search_upper = () => {
+    if (route_upper == "PET") return "OWNER";
+    if (route_upper == "APPOINTMENT") return "PET";
+    else return "??";
+  };
 
   const [loading, setLoading] = useState<boolean>(false);
   const [id, setID] = useState<string>("");
@@ -30,7 +38,7 @@ export const SearchInput: React.FC<ISearchInputProps> = ({
     setLoading(true);
     setHasError(!validateString(id));
     if (!hasError) {
-      const result = await search(id, route);
+      const result = await service.search(id, route);
       if (result instanceof Error) {
       } else {
         setRows(result);
@@ -80,7 +88,7 @@ export const SearchInput: React.FC<ISearchInputProps> = ({
           >
             <SearchInputBox
               name={route + "-search"}
-              label={`PICK A/AN ${route_upper} ID`}
+              label={`PICK A/AN ${search_upper()} ID`}
               value={id}
               hasError={hasError}
               errorText={hasError ? "Please provide a valid id." : ""}

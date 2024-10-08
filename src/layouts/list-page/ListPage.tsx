@@ -1,6 +1,7 @@
 import Box from "@mui/material/Box";
 import {
   GreenCard,
+  ListDialog,
   RoundedButton,
   RoundedFilledTitle,
   RoundedTitle,
@@ -33,15 +34,19 @@ export const ListPage = <T,>({
   contextHook,
 }: IListPageProps<T>) => {
   const [loading, setLoading] = useState<boolean>(false);
+  const [openDialog, setOpenDialog] = useState<boolean>(false);
+  const [messageDialog, setMessageDialog] = useState<string>("");
   const [rows, setRows] = useState<T[]>([]);
   const [count, setCount] = useState<Number>(0);
 
   const getRows = async () => {
     const result = await service.getAll();
     if (result instanceof Error) {
+      setMessageDialog(result.message);
+      setOpenDialog(true);
     } else {
       setRows(result);
-      setCount(rows.length);
+      setCount(result.length);
     }
   };
 
@@ -53,9 +58,21 @@ export const ListPage = <T,>({
 
   return (
     <Box sx={{ displat: "flex", flex: 1 }}>
-      <SearchByID<T> route={route} setRows={setRows}></SearchByID>
+      <SearchByID<T>
+        route={route}
+        setRows={setRows}
+        service={service}
+      ></SearchByID>
       <PageInfo route={route} count={count} contextHook={contextHook} />
       <PageDataGrid columns={columns} pageRows={rows} />
+      <ListDialog
+        model={route}
+        description={messageDialog}
+        open={openDialog}
+        toggleDialog={() => {
+          setOpenDialog(false);
+        }}
+      ></ListDialog>
     </Box>
   );
 };
@@ -63,11 +80,18 @@ export const ListPage = <T,>({
 interface ISearchByIDProps<T> {
   route: string;
   setRows: (value: T[]) => void;
+  service: any;
 }
 
-const SearchByID = <T,>({ route, setRows }: ISearchByIDProps<T>) => {
+const SearchByID = <T,>({ route, setRows, service }: ISearchByIDProps<T>) => {
   if (route == "pet" || route == "appointment")
-    return <SearchInput route={route} setRows={setRows}></SearchInput>;
+    return (
+      <SearchInput
+        route={route}
+        setRows={setRows}
+        service={service}
+      ></SearchInput>
+    );
 };
 
 interface IPageInfoProps {

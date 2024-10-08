@@ -25,12 +25,11 @@ export const LoginPage = () => {
   const [loading, setLoading] = useState<boolean>(false);
 
   const {
-    valid,
     formData,
     errors,
     handleInputChange,
+    handleErrorChange,
     verifyErrors,
-    resetForm,
   } = useLoginForm();
 
   const { login } = useAuthContext();
@@ -38,11 +37,16 @@ export const LoginPage = () => {
   const handleSubmit = async (event: React.FormEvent) => {
     setLoading(true);
     event.preventDefault();
-    verifyErrors();
-    if (valid) {
+    if (verifyErrors()) {
       const result = await login(formData.email, formData.password);
       if (result) navigate("/home");
     } else {
+      if (handleErrorChange) {
+        handleErrorChange({
+          email: "The user or password are incorrect.",
+          password: "The user or password are incorrect.",
+        });
+      }
     }
     setLoading(false);
   };

@@ -10,6 +10,7 @@ import {
   LoginPage,
   PetList,
   PetOperation,
+  UserProfile,
   VetList,
   VetOperation,
 } from "../views";
@@ -53,6 +54,7 @@ export const router = createBrowserRouter([
               { path: "/pet/operation", element: <PetOperation /> },
               { path: "/owner", element: <OwnerList /> },
               { path: "/owner/operation", element: <OwnerOperation /> },
+              { path: "/profile", element: <UserProfile /> },
             ],
           },
         ],

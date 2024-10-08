@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { useCurrentUser } from "../../hooks";
 import { validateExpireStoredStringDate } from "../../util";
 import { AuthService } from "../../../services";
+import { useUserContext } from "./UserConext";
 
 interface IAuthContextData {
   login: (username: string, password: string) => Promise<boolean>;
@@ -23,7 +24,7 @@ const KEY_CURRENT_USER = "APP_CURRENT_USER";
 export const AuthProvider: React.FC<IAuthProviderProps> = ({ children }) => {
   const navigate = useNavigate();
 
-  const { handleUserChange } = useCurrentUser();
+  const { changeUser } = useUserContext();
 
   const [accessToken, setAccessToken] = useState<string>();
 
@@ -39,7 +40,7 @@ export const AuthProvider: React.FC<IAuthProviderProps> = ({ children }) => {
       if (validateExpireStoredStringDate(sessionExpireDate)) {
         setAccessToken(JSON.parse(sessionAccessToken));
         if (storedUserSession) {
-          handleUserChange(JSON.parse(storedUserSession));
+          changeUser(JSON.parse(storedUserSession));
           navigate("/home", { replace: true });
         }
       } else {
@@ -64,11 +65,11 @@ export const AuthProvider: React.FC<IAuthProviderProps> = ({ children }) => {
     const expireDate = new Date();
     expireDate.setDate(expireDate.getDate() + 31);
 
-    handleUserChange(result.loggedUser);
+    changeUser(result.loggedUser);
 
     sessionStorage.setItem(KEY_ACCESS_TOKE, JSON.stringify(result.token));
     sessionStorage.setItem(KEY_EXPIRE_DATE, JSON.stringify(expireDate));
-    sessionStorage.setItem("CURRENT_USER", JSON.stringify(result.loggedUser));
+    sessionStorage.setItem(KEY_CURRENT_USER, JSON.stringify(result.loggedUser));
 
     setAccessToken(result.token);
 
@@ -79,9 +80,9 @@ export const AuthProvider: React.FC<IAuthProviderProps> = ({ children }) => {
   const handleLogout = () => {
     sessionStorage.removeItem(KEY_ACCESS_TOKE);
     sessionStorage.removeItem(KEY_EXPIRE_DATE);
-    sessionStorage.removeItem("CURRENT_USER");
+    sessionStorage.removeItem(KEY_CURRENT_USER);
     setAccessToken(undefined);
-    handleUserChange(undefined);
+    changeUser(undefined);
     navigate("/login", { replace: true });
   };
 

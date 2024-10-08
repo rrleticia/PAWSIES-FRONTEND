@@ -21,7 +21,7 @@ const getAll = async (): Promise<IPet[] | Error> => {
   }
 };
 
-const getAllByOwner = async (id: string): Promise<IPet[] | Error> => {
+const search = async (id: string): Promise<IPet[] | Error> => {
   try {
     const { data } = await Api.get(`/pet/owner/${id}`);
 
@@ -113,7 +113,7 @@ const remove = async (id: string): Promise<IPet | Error> => {
 
 export const PetService = {
   getAll,
-  getAllByOwner,
+  search,
   getOne,
   create,
   update,

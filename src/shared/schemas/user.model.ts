@@ -1,5 +1,5 @@
-import Joi from 'joi';
-import { joiPasswordExtendCore } from 'joi-password';
+import Joi from "joi";
+import { joiPasswordExtendCore } from "joi-password";
 
 const joiPassword = Joi.extend(joiPasswordExtendCore);
 
@@ -10,20 +10,20 @@ export const UserModel = Joi.object().keys({
     .trim()
     .uppercase()
     .valid(
-      'ANONYMOUS',
-      'ADMIN',
-      'VET',
-      'OWNER',
-      'anonymous',
-      'admin',
-      'vet',
-      'owner'
+      "ANONYMOUS",
+      "ADMIN",
+      "VET",
+      "OWNER",
+      "anonymous",
+      "admin",
+      "vet",
+      "owner"
     ),
   username: Joi.string().trim().min(6).required(),
   email: Joi.string()
     .email({
       minDomainSegments: 2,
-      tlds: { allow: ['com', 'net', 'br'] },
+      tlds: { allow: ["com", "net", "br"] },
     })
     .required(),
   password: joiPassword
@@ -36,8 +36,7 @@ export const UserModel = Joi.object().keys({
     .minOfNumeric(1)
     .noWhiteSpaces()
     .onlyLatinCharacters()
-    .doesNotInclude(['password', '12345678', 'aaaaaaaa'])
-    .required(),
+    .doesNotInclude(["password", "12345678", "aaaaaaaa"]),
   vetID: Joi.string().allow(null),
   ownerID: Joi.string().allow(null),
 });

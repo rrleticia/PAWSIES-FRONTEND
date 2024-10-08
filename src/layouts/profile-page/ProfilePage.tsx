@@ -7,7 +7,7 @@ import {
   useOperationDialog,
   validOperation,
 } from "../../shared";
-import { useEffect, useMemo } from "react";
+import { useEffect, useMemo, useState } from "react";
 import {
   GreenCard,
   GreyCard,
@@ -19,9 +19,9 @@ import Box from "@mui/material/Box";
 import { useTheme } from "@mui/material/styles";
 import Divider from "@mui/material/Divider";
 import Typography from "@mui/material/Typography";
-import { OperationDialog } from "./OperationDialog";
+import { OperationDialog } from "../operation-page/OperationDialog";
 
-interface IOperationPageProps<T> {
+interface IProfilePageProps<T> {
   minHeight: string;
   route: string;
   service: any;
@@ -30,24 +30,25 @@ interface IOperationPageProps<T> {
   children: React.ReactNode;
 }
 
-export const OperationPage = <T,>({
+export const ProfilePage = <T,>({
   minHeight,
   route,
   service,
   contextHook,
   operationForm,
   children,
-}: IOperationPageProps<T>) => {
+}: IProfilePageProps<T>) => {
   const navigate = useNavigate();
+  const [loading, setLoading] = useState<boolean>(false);
 
   const route_upper = route.toUpperCase();
 
-  const { id, operation, handleIDChange, handleOperationChange, resetDefault } =
+  const { loginStatus, user, changeUser, operation, handleOperationChange } =
     contextHook();
 
   const {
     formData,
-    errors,
+
     handleFormData,
     handlePasswordInit,
     verifyErrors,
@@ -66,45 +67,31 @@ export const OperationPage = <T,>({
   } = useOperationDialog();
 
   const handleInit = async () => {
-    const result = await service.getOne(id);
+    const result = await service.getOne(user.id);
     if (result instanceof Error) {
     } else {
       handleFormData(result);
-      if (
-        (route == "vet" || route == "owner" || route == "user") &&
-        handlePasswordInit
-      ) {
+      if (handlePasswordInit) {
         handlePasswordInit();
       }
     }
   };
 
   useEffect(() => {
-    if (!validOperation(id, operation)) {
-      resetDefault();
-      resetForm();
-      navigate(`/${route}`);
-    } else {
-      if (operation != "REGISTER") {
-        handleInit();
-      }
-    }
-  }, [handleIDChange, handleOperationChange]);
-
-  const disabledRegister = useMemo(() => {
-    if (operation == "REGISTER") return false;
-    else return true;
-  }, [handleIDChange, handleOperationChange]);
-
-  const disabledExisting = useMemo(() => {
-    if (operation == "REGISTER") return true;
-    else return false;
-  }, [handleIDChange, handleOperationChange]);
+    if (loginStatus) handleInit();
+    else navigate("/home");
+  }, [changeUser, handleOperationChange]);
 
   const handleSubmit = async (event: React.FormEvent) => {
     event.preventDefault();
+    setLoading(true);
     if (verifyErrors()) {
-      const result = await ModelOperation(operation, service, id, formData);
+      const result = await ModelOperation(
+        operation,
+        service,
+        user.id,
+        formData
+      );
       if (result instanceof Error) {
         handleMessageChange(result.message + ".");
         toggleError();
@@ -112,6 +99,7 @@ export const OperationPage = <T,>({
         toggleResult();
       }
     }
+    setLoading(false);
   };
 
   return (
@@ -129,8 +117,7 @@ export const OperationPage = <T,>({
           minHeight={minHeight}
           operation={operation}
           handleOperationChange={handleOperationChange}
-          disabledRegister={disabledRegister}
-          disabledExisting={disabledExisting}
+          disabledExisting={loading}
           resetForm={resetForm}
           toggleCancel={toggleCancel}
         ></OperationCard>
@@ -153,9 +140,8 @@ export const OperationPage = <T,>({
           toggleCancel={toggleCancel}
           handleCancelation={() => {
             resetForm();
-            handleIDChange("NONE");
             handleOperationChange("NONE");
-            navigate(-1);
+            navigate("/home");
           }}
         ></OperationDialog>
       </Box>
@@ -167,7 +153,6 @@ interface IOperationCardProps {
   minHeight: string;
   operation: OperationType;
   handleOperationChange: (value: OperationType) => void;
-  disabledRegister: boolean;
   disabledExisting: boolean;
   resetForm: () => void;
   toggleCancel: () => void;
@@ -177,7 +162,6 @@ const OperationCard: React.FC<IOperationCardProps> = ({
   minHeight,
   operation,
   handleOperationChange,
-  disabledRegister,
   disabledExisting,
   resetForm,
   toggleCancel,
@@ -230,27 +214,12 @@ const OperationCard: React.FC<IOperationCardProps> = ({
           }}
         ></RoundedSwitchButton>
         <RoundedSwitchButton
-          text={"REGISTER"}
-          filled={operation == "REGISTER"}
-          disabled={disabledRegister}
-        ></RoundedSwitchButton>
-        <RoundedSwitchButton
           text={"EDIT"}
           filled={operation == "EDIT"}
           disabled={disabledExisting}
           handleClick={() => {
             if (!disabledExisting) {
               handleOperationChange("EDIT");
-            }
-          }}
-        ></RoundedSwitchButton>
-        <RoundedSwitchButton
-          text={"DELETE"}
-          filled={operation == "DELETE"}
-          disabled={disabledExisting}
-          handleClick={() => {
-            if (!disabledExisting) {
-              handleOperationChange("DELETE");
             }
           }}
         ></RoundedSwitchButton>
@@ -269,7 +238,7 @@ const OperationCard: React.FC<IOperationCardProps> = ({
           width={"80%"}
           handleClick={() => {
             resetForm();
-            if (operation == "VIEW") navigate(-1);
+            if (operation == "VIEW") navigate("/home");
           }}
         ></RoundedFilledButton>
         <RoundedFilledButton

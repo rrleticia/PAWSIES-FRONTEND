@@ -1,17 +1,17 @@
 import Box from "@mui/material/Box";
 import { InputBox, SideInputBox } from "../../components";
 import {
-  IOwner,
-  IOwnerHookJson,
-  useOwnerContext,
-  useOwnerForm,
+  IUser,
+  IUserHookJson,
+  useUserContext,
+  useUserForm,
 } from "../../shared";
 import { useTheme } from "@mui/material/styles";
-import { OwnerService } from "../../services";
-import { OperationPage } from "../../layouts";
+import { UserService } from "../../services";
+import { ProfilePage } from "../../layouts";
 import { useMemo } from "react";
 
-export const OwnerOperation = () => {
+export const UserProfile = () => {
   const theme = useTheme();
   const minHeight = `calc(100% - ${theme.spacing(4)})`;
 
@@ -23,13 +23,13 @@ export const OwnerOperation = () => {
     handlePasswordInit,
     verifyErrors,
     resetForm,
-  } = useOwnerForm();
+  } = useUserForm();
 
   return (
-    <OperationPage<IOwner>
+    <ProfilePage<IUser>
       minHeight={minHeight}
-      route={"owner"}
-      contextHook={useOwnerContext}
+      route={"user"}
+      contextHook={useUserContext}
       operationForm={{
         formData,
         handleFormData,
@@ -40,43 +40,60 @@ export const OwnerOperation = () => {
         resetForm,
       }}
       children={
-        <OwnerInput
+        <UserInput
           formData={formData}
           handleInputChange={handleInputChange}
           errors={errors}
-        ></OwnerInput>
+        ></UserInput>
       }
-      service={OwnerService}
-    ></OperationPage>
+      service={UserService}
+    ></ProfilePage>
   );
 };
 
-interface IOwnerInputProps {
-  formData: IOwnerHookJson;
+interface IUserInputProps {
+  formData: IUserHookJson;
   handleInputChange: (event: any) => void;
   errors: any;
 }
 
-const OwnerInput: React.FC<IOwnerInputProps> = ({
+const UserInput: React.FC<IUserInputProps> = ({
   formData,
   handleInputChange,
   errors,
 }) => {
-  const { operation } = useOwnerContext();
+  const { operation } = useUserContext();
 
   const disabled: boolean = useMemo(() => operation == "VIEW", [operation]);
 
   return (
     <>
-      <InputBox
-        name={"name"}
-        label={"NAME"}
-        value={formData.name}
-        hasError={Boolean(errors.name)}
-        errorText={errors.name || ""}
-        handleChange={handleInputChange}
-        disabled={disabled}
-      ></InputBox>
+      <Box sx={{ display: "flex", flexDirection: "row", width: "100%" }}>
+        <SideInputBox side={"left"}>
+          <InputBox
+            name={"name"}
+            label={"NAME"}
+            value={formData.name}
+            hasError={Boolean(errors.name)}
+            errorText={errors.name || ""}
+            handleChange={handleInputChange}
+            disabled={disabled}
+          ></InputBox>
+        </SideInputBox>
+
+        <SideInputBox side={"right"}>
+          <InputBox
+            name={"role"}
+            label={"ROLE"}
+            value={formData.role}
+            hasError={false}
+            errorText={""}
+            handleChange={() => {}}
+            disabled={true}
+          ></InputBox>
+        </SideInputBox>
+      </Box>
+
       <InputBox
         name={"email"}
         label={"E-MAIL"}

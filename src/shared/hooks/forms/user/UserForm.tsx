@@ -2,22 +2,31 @@ import { useState } from "react";
 import { Validators } from "../../../schemas"; // Joi schema
 import { FormHookType } from "../../../interfaces";
 
-export interface ILoginHookJson {
+export interface IUserHookJson {
+  id: string;
+  name: string;
+  role: string;
+  username: string;
   email: string;
   password: string;
 }
 
-export const useLoginForm = (): FormHookType => {
-  const [valid, setValid] = useState<boolean>(true);
-
-  const [formData, setFormData] = useState<ILoginHookJson>({
+export const useUserForm = (): FormHookType => {
+  const [formData, setFormData] = useState<IUserHookJson>({
+    id: "",
+    name: "",
+    role: "",
+    username: "",
     email: "",
     password: "",
   });
 
   const [errors, setErrors] = useState<
-    Partial<Record<keyof ILoginHookJson, string>>
+    Partial<Record<keyof IUserHookJson, string>>
   >({
+    name: "",
+    role: "",
+    username: "",
     email: "",
     password: "",
   });
@@ -38,34 +47,40 @@ export const useLoginForm = (): FormHookType => {
     });
   };
 
+  const handlePasswordInit = () => {
+    setFormData((prevFormData) => ({
+      ...prevFormData, // Spread the previous form data to preserve other fields
+      password: "PASSWORD WILL NOT BE SHOWN", // Override only the password field
+    }));
+  };
+
   // Validate form data and set errors if any
   const verifyErrors = () => {
-    const { error } = Validators["LoginSchema"].validate(formData, {
+    const { error } = Validators["UserSchema"].validate(formData, {
       abortEarly: false, // Collect all errors
     });
 
     if (error) {
-      setValid(false);
-      const newErrors: Partial<Record<keyof ILoginHookJson, string>> = {};
+      const newErrors: Partial<Record<keyof IUserHookJson, string>> = {};
       error.details.forEach((detail: any) => {
-        const field = detail.path[0] as keyof ILoginHookJson; // Explicitly type the field as keyof ILoginJson
+        const field = detail.path[0] as keyof IUserHookJson; // Explicitly type the field as keyof IUserJson
         newErrors[field] = detail.message; // Assign error message to corresponding field
       });
       setErrors(newErrors); // Set all form errors
-      return false;
+      return false; // Return false if there are validation errors
     } else {
-      setValid(true);
-      // If no errors, clear errors and handle form submission
+      // No errors, clear the errors
       setErrors({});
-      console.log("Form data is valid. Ready for submission:", formData);
-      // Proceed with form submission logic, e.g., API call
-      return true;
+      return true; // Return true if there are no validation errors
     }
   };
 
   const resetForm = () => {
-    setValid(true);
     setFormData({
+      id: "",
+      name: "",
+      role: "",
+      username: "",
       email: "",
       password: "",
     });
@@ -74,10 +89,10 @@ export const useLoginForm = (): FormHookType => {
 
   return {
     formData,
-    errors,
     handleFormData: setFormData,
+    handlePasswordInit,
+    errors,
     handleInputChange,
-    handleErrorChange: setErrors,
     verifyErrors,
     resetForm,
   };
