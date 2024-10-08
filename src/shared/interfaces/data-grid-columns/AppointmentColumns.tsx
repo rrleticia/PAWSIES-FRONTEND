@@ -1,11 +1,19 @@
 import { GridColDef } from "@mui/x-data-grid/models/colDef/gridColDef";
 import {
+  OptionsMenu,
   renderEditStatus,
   renderStatus,
   STATUS_OPTIONS,
 } from "../../../components";
 import Button from "@mui/material/Button";
-import { getDateTransform, getPetInfo } from "../../util";
+import {
+  getCreatedAtTransform,
+  getDateTransform,
+  getPetInfo,
+} from "../../util";
+import { Box } from "@mui/material";
+import { useAppointmentContext } from "../../contexts";
+import { useMenuState } from "../../hooks";
 
 export const appointmentColumns: GridColDef[] = [
   {
@@ -32,6 +40,7 @@ export const appointmentColumns: GridColDef[] = [
     display: "flex",
     flex: 0,
     hideable: false,
+    valueGetter: getDateTransform,
   },
   {
     field: "hour",
@@ -74,7 +83,7 @@ export const appointmentColumns: GridColDef[] = [
     display: "flex",
     flex: 1,
     hideable: false,
-    valueGetter: getDateTransform,
+    valueGetter: getCreatedAtTransform,
   },
   {
     field: "ownerID",
@@ -94,26 +103,42 @@ export const appointmentColumns: GridColDef[] = [
     field: "acoes",
     type: "actions",
     headerName: "Operations",
-    display: "flex",
-    flex: 0,
     cellClassName: "actions",
     getActions: ({ id }) => {
-      return [
-        <Button
-          variant="contained"
-          size="small"
-          style={{ marginLeft: 16 }}
-          sx={{
-            boxShadow: "none",
-            "&:hover": {
-              boxShadow: "none",
-            },
-          }}
-          onClick={() => {}}
-        >
-          Open
-        </Button>,
-      ];
+      const choosenID = id as string;
+      return [<RowMenu id={choosenID}></RowMenu>];
     },
   },
 ];
+
+const RowMenu: React.FC<{ id: string }> = ({ id }) => {
+  const { anchorEl, show, handleClick, handleClose } = useMenuState();
+
+  return (
+    <Box>
+      <Button
+        variant="contained"
+        size="small"
+        style={{ marginLeft: 16 }}
+        sx={{
+          boxShadow: "none",
+          "&:hover": {
+            boxShadow: "none",
+          },
+        }}
+        onClick={handleClick}
+      >
+        OPEN
+      </Button>
+
+      <OptionsMenu
+        choosenID={id}
+        type={"appointment"}
+        anchorEl={anchorEl}
+        show={show}
+        handleClose={handleClose}
+        contextHook={useAppointmentContext}
+      ></OptionsMenu>
+    </Box>
+  );
+};

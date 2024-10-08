@@ -1,11 +1,13 @@
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import {
+  filterByDate,
   formatDate,
   homeColumns,
   IAppointment,
   space,
   useInputMask,
+  validateString,
 } from "../../shared";
 import { useEffect, useState } from "react";
 import { useTheme } from "@mui/material/styles";
@@ -15,6 +17,7 @@ import {
   RoundedFilledTitle,
   RoundedTitle,
   TheoBanner,
+  HomeDialog,
 } from "../../components";
 import Divider from "@mui/material/Divider";
 import Button from "@mui/material/Button";
@@ -22,16 +25,59 @@ import { DataGrid } from "@mui/x-data-grid/DataGrid";
 import { GridColumnVisibilityModel } from "@mui/x-data-grid/hooks/features/columns/gridColumnsInterfaces";
 import PetsIcon from "@mui/icons-material/Pets";
 import Icon from "@mui/material/Icon";
+import { AppointmentService } from "../../services";
 
 export const HomePage = () => {
+  const [openError, setOpenError] = useState<boolean>(false);
+  const [loading, setLoading] = useState<boolean>(false);
+  const [reset, setReset] = useState<boolean>(false);
+
   const [date, setDate] = useState<string>("");
-  console.log();
+  const [count, setCount] = useState<Number>(0);
+  const [completed, setCompleted] = useState<Number>(0);
+
+  const [appointmentRows, setAppointmentRows] = useState<IAppointment[]>([]);
+
+  const fetchData = async () => {
+    const result = await AppointmentService.getAll();
+    if (result instanceof Error) {
+      setOpenError(true);
+      setCount(0);
+      setCompleted(0);
+    } else {
+      setAppointmentRows(result);
+      setCount(appointmentRows.length);
+      setCompleted(appointmentRows.map((a) => a.status == "COMPLETED").length);
+    }
+  };
+
+  useEffect(() => {
+    setLoading(true);
+    fetchData();
+    setLoading(false);
+  }, [reset]);
+
   return (
     <Box sx={{ display: "flex", flexDirection: "column", width: "100%" }}>
       <TheoBanner />
-      <DatePicker date={date} setDate={setDate} />
-      <HomeInfo />
-      <HomeDashBoard />
+      <DatePicker
+        date={date}
+        setDate={setDate}
+        setOpenError={setOpenError}
+        appointmentRows={appointmentRows}
+        setAppointmentRows={setAppointmentRows}
+        setCount={setCount}
+        setCompleted={setCompleted}
+        reset={reset}
+        setReset={setReset}
+      />
+      <HomeInfo count={count} completed={completed} />
+      <HomeDashBoard appointmentRows={appointmentRows} />
+
+      <HomeDialog
+        open={openError}
+        toggleDialog={() => setOpenError(!openError)}
+      />
     </Box>
   );
 };
@@ -39,20 +85,49 @@ export const HomePage = () => {
 interface IDatePickerProps {
   date: string;
   setDate: (value: string) => void;
+  setOpenError: (value: boolean) => void;
+  appointmentRows: IAppointment[];
+  setAppointmentRows: (value: IAppointment[]) => void;
+  setCount: (value: Number) => void;
+  setCompleted: (value: Number) => void;
+  reset: boolean;
+  setReset: (value: boolean) => void;
 }
 
-const DatePicker: React.FC<IDatePickerProps> = ({ date, setDate }) => {
+const DatePicker: React.FC<IDatePickerProps> = ({
+  date,
+  setDate,
+  setOpenError,
+  appointmentRows,
+  setAppointmentRows,
+  setCount,
+  setCompleted,
+  reset,
+  setReset,
+}) => {
   const theme = useTheme();
   const { dateRef } = useInputMask();
 
   const todayDate = new Date();
 
   const [loading, setLoading] = useState<boolean>(false);
-  const [datePicked, setDatePicked] = useState<string>("");
+
   const [hasError, setHasError] = useState<boolean>(false);
 
   const handleClick = () => {
     setLoading(true);
+    if (validateString(date)) {
+      setHasError(false);
+      const result = filterByDate(appointmentRows, date);
+      console.log(result);
+      setAppointmentRows(result);
+      setCount(result.length);
+      setCompleted(result.map((a) => a.status == "COMPLETED").length);
+    } else {
+      setHasError(true);
+      setOpenError(true);
+    }
+    setLoading(false);
   };
 
   return (
@@ -88,20 +163,41 @@ const DatePicker: React.FC<IDatePickerProps> = ({ date, setDate }) => {
         />
         <Typography
           sx={{
+            flex: 1,
             fontWeight: 400,
             fontSize: "1rem",
             color: "text.primary",
             paddingX: theme.spacing(3),
           }}
         >
-          {`CURRENT DATE PICKED: ${datePicked ? date : "NO DATE PICKED"}`}{" "}
+          {`CURRENT DATE: ${date ? date : "NO DATE"}`}
         </Typography>
+        <Divider
+          orientation="vertical"
+          flexItem
+          sx={{
+            borderRightWidth: 2,
+            color: "text.primary",
+          }}
+        />
+        <Button
+          disableRipple={true}
+          sx={{
+            height: "100%",
+            color: "secondary.dark",
+            paddingX: theme.spacing(3),
+          }}
+          onClick={() => setReset(!reset)}
+        >
+          {`RESET`}
+        </Button>
       </Box>
 
       <Box
         sx={{
           display: "flex",
           flex: "1",
+          flexDirection: "column",
           alignItems: "center",
           justifyContent: "center",
         }}
@@ -161,15 +257,13 @@ const DatePicker: React.FC<IDatePickerProps> = ({ date, setDate }) => {
   );
 };
 
-const HomeInfo: React.FC<{}> = ({}) => {
+interface IHomeInfoProps {
+  count: Number;
+  completed: Number;
+}
+
+const HomeInfo: React.FC<IHomeInfoProps> = ({ count, completed }) => {
   const theme = useTheme();
-
-  const [count, setCount] = useState<Number>(0);
-  const [completed, setCompleted] = useState<Number>(0);
-
-  useEffect(() => {
-    //
-  }, []);
 
   return (
     <Box
@@ -187,13 +281,11 @@ const HomeInfo: React.FC<{}> = ({}) => {
   );
 };
 
-const HomeDashBoard: React.FC<{}> = ({}) => {
-  const [appointmentRows, setAappointmentRows] = useState<IAppointment[]>([]);
+interface IHomeDashBoardProps {
+  appointmentRows: IAppointment[];
+}
 
-  useEffect(() => {
-    setAappointmentRows([]);
-  }, []);
-
+const HomeDashBoard: React.FC<IHomeDashBoardProps> = ({ appointmentRows }) => {
   const columnVisibilityModel: GridColumnVisibilityModel = {
     id: false,
   };

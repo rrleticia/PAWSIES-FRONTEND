@@ -1,5 +1,5 @@
-import { AppointmentStatus, Examination } from "../shared";
 import { IPet } from ".";
+import { AppointmentStatus, Examination } from "../interfaces";
 
 export interface IAppointment {
   id: string;

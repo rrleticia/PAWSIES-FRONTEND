@@ -5,55 +5,33 @@ import DialogActions from "@mui/material/DialogActions";
 import DialogContent from "@mui/material/DialogContent";
 import DialogContentText from "@mui/material/DialogContentText";
 import DialogTitle from "@mui/material/DialogTitle";
-import { useNavigate } from "react-router-dom";
 
-interface ICancelatonDialogProps {
+interface IHomeDialogProps {
   open: boolean;
   toggleDialog: () => void;
-  model: string;
-  operation: string;
-  handleCancelation: () => void;
 }
 
-export const CancelationDialog: React.FC<ICancelatonDialogProps> = ({
+export const HomeDialog: React.FC<IHomeDialogProps> = ({
   open,
   toggleDialog,
-  model,
-  operation,
-  handleCancelation,
 }) => {
-  const navigate = useNavigate();
-
-  const handleBack = () => {
-    navigate(-1);
-  };
-
   return (
     <Dialog open={open} onClose={toggleDialog}>
       <DialogTitle id="alert-dialog-title">
-        {`Cancel ${operation} of ${model}?`}
+        {`An unknown error has ocurred when loading the home page.`}
       </DialogTitle>
       <DialogContent>
         <DialogContentText id="alert-dialog-description">
-          {`When confirmed all data will be lost. Please confirm the cancelation of ${operation} a/an ${model}.`}
+          {`Since an error has occured you will not see any of the appointment data. The home page will not show anything.`}
         </DialogContentText>
       </DialogContent>
       <DialogActions>
         <Button
           id="basic-button"
-          sx={{ color: "error.dark" }}
-          onClick={toggleDialog}
-        >
-          Cancelar
-        </Button>
-        <Button
-          id="basic-button"
           aria-haspopup="true"
           sx={{ color: "success.dark" }}
           onClick={() => {
-            handleCancelation();
             toggleDialog();
-            handleBack();
           }}
           autoFocus
         >

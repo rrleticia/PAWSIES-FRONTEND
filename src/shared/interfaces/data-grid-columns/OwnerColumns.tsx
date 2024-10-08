@@ -4,7 +4,7 @@ import { GridColDef } from "@mui/x-data-grid/models/colDef/gridColDef";
 import { useMenuState } from "../../hooks";
 import { OptionsMenu } from "../../../components";
 import { useOwnerContext } from "../../contexts";
-import { getDateTransform } from "../../util";
+import { getCreatedAtTransform, getDateTransform } from "../../util";
 
 export const ownerColumns: GridColDef[] = [
   {
@@ -42,7 +42,7 @@ export const ownerColumns: GridColDef[] = [
     display: "flex",
     flex: 1,
     hideable: false,
-    valueGetter: getDateTransform,
+    valueGetter: getCreatedAtTransform,
   },
   {
     field: "ownerID",
@@ -51,7 +51,6 @@ export const ownerColumns: GridColDef[] = [
     flex: 1,
     hideable: false,
   },
-
   {
     field: "acoes",
     type: "actions",

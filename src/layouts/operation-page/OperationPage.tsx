@@ -80,15 +80,17 @@ export const OperationPage = <T,>({
   };
 
   useEffect(() => {
-    if (!validOperation(id, operation)) {
-      resetDefault();
-      resetForm();
-      navigate(-1);
-    } else {
-      if (operation != "REGISTER") {
-        handleInit();
-      }
+    // if (!validOperation(id, operation)) {
+    //   resetDefault();
+    //   resetForm();
+    //   navigate(`/${route}`);
+    // }
+    // else {
+    if (operation != "REGISTER") {
+      handleInit();
     }
+    // }
+    console.log(id);
   }, [handleIDChange, handleOperationChange]);
 
   const disabledRegister = useMemo(() => {

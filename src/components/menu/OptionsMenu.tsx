@@ -10,7 +10,7 @@ import Box from "@mui/material/Box";
 
 interface IOptionsMenuProps {
   choosenID: string;
-  type: "owner" | "appointments" | "vets" | "dpets";
+  type: "owner" | "appointment" | "vet" | "pet";
   anchorEl: HTMLElement | null;
   show: boolean;
   handleClose: () => void;

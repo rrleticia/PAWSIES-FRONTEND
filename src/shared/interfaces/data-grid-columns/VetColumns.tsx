@@ -4,7 +4,7 @@ import { GridColDef } from "@mui/x-data-grid/models/colDef/gridColDef";
 import { useMenuState } from "../../hooks";
 import { OptionsMenu } from "../../../components";
 import { useVetContext } from "../../contexts";
-import { getDateTransform } from "../../util";
+import { getCreatedAtTransform, getDateTransform } from "../../util";
 
 export const vetColumns: GridColDef[] = [
   {
@@ -49,7 +49,7 @@ export const vetColumns: GridColDef[] = [
     display: "flex",
     flex: 1,
     hideable: false,
-    valueGetter: getDateTransform,
+    valueGetter: getCreatedAtTransform,
   },
   {
     field: "vetID",
@@ -93,7 +93,7 @@ const RowMenu: React.FC<{ id: string }> = ({ id }) => {
 
       <OptionsMenu
         choosenID={id}
-        type={"owner"}
+        type={"vet"}
         anchorEl={anchorEl}
         show={show}
         handleClose={handleClose}

@@ -1,6 +1,12 @@
 import Box from "@mui/material/Box";
-import { InputBox, SideInputBox } from "../../components";
-import { IVet, IVetHookJson, useVetContext, useVetForm } from "../../shared";
+import { InputBox, SelectBox, SideInputBox } from "../../components";
+import {
+  IVet,
+  IVetHookJson,
+  specialtyOptions,
+  useVetContext,
+  useVetForm,
+} from "../../shared";
 import { useTheme } from "@mui/material/styles";
 import { VetService } from "../../services";
 import { OperationPage } from "../../layouts";
@@ -76,7 +82,7 @@ const VetInput: React.FC<IVetInputProps> = ({
           ></InputBox>
         </SideInputBox>
         <SideInputBox side={"right"}>
-          <InputBox
+          <SelectBox
             name={"specialty"}
             label={"SPECIALTY"}
             value={formData.specialty}
@@ -84,7 +90,8 @@ const VetInput: React.FC<IVetInputProps> = ({
             errorText={errors.specialty || ""}
             handleChange={handleInputChange}
             disabled={disabled}
-          ></InputBox>
+            options={specialtyOptions}
+          ></SelectBox>
         </SideInputBox>
       </Box>
       <InputBox

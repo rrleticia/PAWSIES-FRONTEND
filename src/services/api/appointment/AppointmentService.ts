@@ -1,4 +1,4 @@
-import { IAppointment } from "../../../models";
+import { IAppointment } from "../../../shared";
 import { Api } from "../axios-config";
 
 const getAll = async (): Promise<IAppointment[] | Error> => {
@@ -24,6 +24,26 @@ const getAll = async (): Promise<IAppointment[] | Error> => {
 const getAllByPetID = async (id: string): Promise<IAppointment[] | Error> => {
   try {
     const { data } = await Api.get(`/appointment/${id}`);
+
+    if (data) {
+      return data;
+    }
+
+    return new Error(
+      "Nenhum dado foi retornado ao tentar recuperar todos os appointments por pet fornecido."
+    );
+  } catch (error) {
+    console.error(error);
+    return new Error(
+      (error as { message: string }).message ||
+        "Erro ao tentar recuperar todos os appointments por pet fornecido."
+    );
+  }
+};
+
+const getAllByDate = async (date: string): Promise<IAppointment[] | Error> => {
+  try {
+    const { data } = await Api.get(`/appointment/date/${date}`);
 
     if (data) {
       return data;
@@ -147,6 +167,7 @@ const remove = async (id: string): Promise<IAppointment | Error> => {
 export const AppointmentService = {
   getAll,
   getAllByPetID,
+  getAllByDate,
   getOne,
   create,
   update,

@@ -5,7 +5,7 @@ import ListItemText from "@mui/material/ListItemText";
 import MenuItem from "@mui/material/MenuItem";
 import type { MenuProps } from "@mui/material/Menu";
 import Select, { SelectProps } from "@mui/material/Select";
-import { styled, useTheme } from "@mui/material/styles";
+import { styled } from "@mui/material/styles";
 import CancelIcon from "@mui/icons-material/Cancel";
 import ReportProblemIcon from "@mui/icons-material/ReportProblem";
 import InfoIcon from "@mui/icons-material/Info";
@@ -20,6 +20,8 @@ import {
   useGridApiContext,
   useGridRootProps,
 } from "@mui/x-data-grid";
+import { AppointmentService } from "../../../services";
+import { AppointmentStatus } from "../../../shared";
 
 export const STATUS_OPTIONS = [
   "SCHEDULED",
@@ -145,6 +147,7 @@ function EditStatus(props: GridRenderEditCellParams<any, AppointmentStatus>) {
     });
 
     if (isValid && rootProps.editMode === GridEditModes.Cell) {
+      await AppointmentService.updateStatus(id as string, event.target.value);
       apiRef.current.stopCellEditMode({ id, field, cellToFocusAfter: "below" });
     }
   };
@@ -232,7 +235,7 @@ export function renderStatus(params: GridRenderCellParams<any, string>) {
 }
 
 export function renderEditStatus(
-  params: GridRenderEditCellParams<any, string>
+  params: GridRenderEditCellParams<any, AppointmentStatus>
 ) {
   return <EditStatus {...params} />;
 }

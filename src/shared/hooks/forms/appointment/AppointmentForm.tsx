@@ -59,6 +59,7 @@ export const useAppointmentForm = (): FormHookType => {
 
   // Validate form data and set errors if any
   const verifyErrors = () => {
+    console.log(formData);
     const { error } = Validators["AppointmentSchema"].validate(formData, {
       abortEarly: false, // Collect all errors
     });

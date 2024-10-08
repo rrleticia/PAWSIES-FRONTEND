@@ -12,7 +12,7 @@ export const useInputMask = () => {
   });
 
   const dateRef = useMask({
-    mask: "__:__",
+    mask: "__/__/____",
     replacement: { _: /\d/ },
   });
 

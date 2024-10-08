@@ -1,19 +1,10 @@
-import {
-  GridColDef,
-  GridValueGetter,
-} from "@mui/x-data-grid/models/colDef/gridColDef";
+import { GridColDef } from "@mui/x-data-grid/models/colDef/gridColDef";
 import {
   renderEditStatus,
   renderStatus,
   STATUS_OPTIONS,
 } from "../../../components";
-import Button from "@mui/material/Button";
-
-const getPetInfo: GridValueGetter<any[number], unknown> = (value, row) => {
-  return `${row.pet.name + " - " || ""} ${row.pet.age + " years - " || ""} ${
-    row.pet.breed || ""
-  }`;
-};
+import { getDateTransform, getPetInfo } from "../../util";
 
 export const homeColumns: GridColDef[] = [
   {
@@ -40,6 +31,7 @@ export const homeColumns: GridColDef[] = [
     display: "flex",
     flex: 0,
     hideable: false,
+    valueGetter: getDateTransform,
   },
   {
     field: "hour",
@@ -74,31 +66,5 @@ export const homeColumns: GridColDef[] = [
     valueOptions: STATUS_OPTIONS,
     width: 200,
     editable: true,
-  },
-  {
-    field: "acoes",
-    type: "actions",
-    headerName: "Operations",
-    display: "flex",
-    flex: 0,
-    cellClassName: "actions",
-    getActions: ({ id }) => {
-      return [
-        <Button
-          variant="contained"
-          size="small"
-          style={{ marginLeft: 16 }}
-          sx={{
-            boxShadow: "none",
-            "&:hover": {
-              boxShadow: "none",
-            },
-          }}
-          onClick={() => {}}
-        >
-          Open
-        </Button>,
-      ];
-    },
   },
 ];

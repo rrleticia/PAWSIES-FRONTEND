@@ -1,8 +1,10 @@
 import Box from "@mui/material/Box";
-import { InputBox, SideInputBox } from "../../components";
+import { InputBox, SelectBox, SideInputBox } from "../../components";
 import {
+  examinationOptions,
   IAppointment,
   IAppointmentHookJson,
+  statusOptions,
   useAppointmentContext,
   useAppointmentForm,
   useInputMask,
@@ -29,7 +31,7 @@ export const AppointmentOperation = () => {
   return (
     <OperationPage<IAppointment>
       minHeight={minHeight}
-      route={"Appointment"}
+      route={"appointment"}
       contextHook={useAppointmentContext}
       operationForm={{
         formData,
@@ -64,7 +66,7 @@ const AppointmentInput: React.FC<IAppointmentInputProps> = ({
   errors,
 }) => {
   const { operation } = useAppointmentContext();
-  const { dateRef } = useInputMask();
+  const { dateRef, hourRef } = useInputMask();
 
   const disabled: boolean = useMemo(() => operation == "VIEW", [operation]);
 
@@ -77,15 +79,15 @@ const AppointmentInput: React.FC<IAppointmentInputProps> = ({
             name={"date"}
             label={"DATE"}
             value={formData.date}
-            hasError={Boolean(errors.name)}
-            errorText={errors.name || ""}
+            hasError={Boolean(errors.date)}
+            errorText={errors.date || ""}
             handleChange={handleInputChange}
             disabled={disabled}
           ></InputBox>
         </SideInputBox>
         <SideInputBox side={"right"}>
           <InputBox
-            inputRef={dateRef}
+            inputRef={hourRef}
             name={"hour"}
             label={"HOUR"}
             value={formData.hour}
@@ -100,11 +102,11 @@ const AppointmentInput: React.FC<IAppointmentInputProps> = ({
       <Box sx={{ display: "flex", flexDirection: "row", width: "100%" }}>
         <SideInputBox side={"left"}>
           <InputBox
-            name={"examination"}
-            label={"EXAMINATION"}
-            value={formData.examination}
-            hasError={Boolean(errors.examination)}
-            errorText={errors.examination || ""}
+            name={"petID"}
+            label={"PETID"}
+            value={formData.petID}
+            hasError={Boolean(errors.petID)}
+            errorText={errors.petID || ""}
             handleChange={handleInputChange}
             disabled={disabled}
           ></InputBox>
@@ -124,7 +126,19 @@ const AppointmentInput: React.FC<IAppointmentInputProps> = ({
 
       <Box sx={{ display: "flex", flexDirection: "row", width: "100%" }}>
         <SideInputBox side={"left"}>
-          <InputBox
+          <SelectBox
+            name={"examination"}
+            label={"EXAMINATION"}
+            value={formData.examination}
+            hasError={Boolean(errors.examination)}
+            errorText={errors.examination || ""}
+            handleChange={handleInputChange}
+            disabled={disabled}
+            options={examinationOptions}
+          ></SelectBox>
+        </SideInputBox>
+        <SideInputBox side={"right"}>
+          <SelectBox
             name={"status"}
             label={"STATUS"}
             value={formData.status}
@@ -132,18 +146,8 @@ const AppointmentInput: React.FC<IAppointmentInputProps> = ({
             errorText={errors.status || ""}
             handleChange={handleInputChange}
             disabled={disabled}
-          ></InputBox>
-        </SideInputBox>
-        <SideInputBox side={"right"}>
-          <InputBox
-            name={"petID"}
-            label={"PETID"}
-            value={formData.petID}
-            hasError={Boolean(errors.petID)}
-            errorText={errors.petID || ""}
-            handleChange={handleInputChange}
-            disabled={disabled}
-          ></InputBox>
+            options={statusOptions}
+          ></SelectBox>
         </SideInputBox>
       </Box>
 

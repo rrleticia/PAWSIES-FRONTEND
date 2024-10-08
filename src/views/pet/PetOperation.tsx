@@ -1,6 +1,12 @@
 import Box from "@mui/material/Box";
-import { InputBox, SideInputBox } from "../../components";
-import { IPet, IPetHookJson, usePetContext, usePetForm } from "../../shared";
+import { InputBox, SelectBox, SideInputBox } from "../../components";
+import {
+  IPet,
+  IPetHookJson,
+  petTypeOptions,
+  usePetContext,
+  usePetForm,
+} from "../../shared";
 import { useTheme } from "@mui/material/styles";
 import { PetService } from "../../services";
 import { OperationPage } from "../../layouts";
@@ -76,7 +82,7 @@ const PetInput: React.FC<IPetInputProps> = ({
           ></InputBox>
         </SideInputBox>
         <SideInputBox side={"right"}>
-          <InputBox
+          <SelectBox
             name={"type"}
             label={"TYPE"}
             value={formData.type}
@@ -84,7 +90,8 @@ const PetInput: React.FC<IPetInputProps> = ({
             errorText={errors.type || ""}
             handleChange={handleInputChange}
             disabled={disabled}
-          ></InputBox>
+            options={petTypeOptions}
+          ></SelectBox>
         </SideInputBox>
       </Box>
       <Box sx={{ display: "flex", flexDirection: "row", width: "100%" }}>

@@ -1,4 +1,4 @@
-import { ResultDialog, ErrorDialog, CancelatonDialog } from "../../components";
+import { ResultDialog, ErrorDialog, CancelationDialog } from "../../components";
 
 interface IOperationDialogPorops {
   model: string;
@@ -41,13 +41,13 @@ export const OperationDialog: React.FC<IOperationDialogPorops> = ({
         model={model}
         description={description}
       ></ErrorDialog>
-      <CancelatonDialog
+      <CancelationDialog
         open={openCancel}
         toggleDialog={toggleCancel}
         model={model}
         operation={dialogOperation}
         handleCancelation={handleCancelation}
-      ></CancelatonDialog>
+      ></CancelationDialog>
     </>
   );
 };

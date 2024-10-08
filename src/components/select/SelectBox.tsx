@@ -1,11 +1,17 @@
 import { useTheme } from "@mui/material";
-import TextField from "@mui/material/TextField";
+import {
+  Select,
+  MenuItem,
+  FormControl,
+  InputLabel,
+  FormHelperText,
+} from "@mui/material";
 
-interface IInputBoxProps {
+interface ISelectBoxProps {
   name: string;
   label: string;
-  type?: "text" | "number";
   value: string;
+  options: { value: string; label: string }[]; // Array of options for the select box
   hasError: boolean;
   errorText: string;
   handleChange: (event: any) => void;
@@ -13,20 +19,21 @@ interface IInputBoxProps {
   inputRef?: any;
 }
 
-export const InputBox: React.FC<IInputBoxProps> = ({
+export const SelectBox: React.FC<ISelectBoxProps> = ({
   inputRef,
   name,
   label,
-  type,
   value,
+  options,
   hasError,
   errorText,
   disabled,
   handleChange,
 }) => {
   const theme = useTheme();
+
   return (
-    <TextField
+    <FormControl
       fullWidth={true}
       variant="outlined"
       sx={{
@@ -40,24 +47,25 @@ export const InputBox: React.FC<IInputBoxProps> = ({
         "& .MuiInputBase-input.Mui-disabled": {
           WebkitTextFillColor: "#a3a7b6",
         },
-        "&  .MuiFormHelperText-root.Mui-error": { color: "error.dark" },
       }}
-      slotProps={{
-        inputLabel: {
-          shrink: false,
-        },
-
-        formHelperText: { style: { backgroundColor: "white" } },
-      }}
-      inputRef={inputRef ?? undefined}
-      name={name}
-      label={value == "" ? label : ""}
-      type={type ?? "text"}
-      value={value}
       error={hasError}
-      helperText={errorText}
       disabled={disabled ?? false}
-      onChange={handleChange}
-    ></TextField>
+    >
+      <InputLabel shrink={false}>{value == "" ? label : ""}</InputLabel>
+      <Select
+        name={name}
+        value={value}
+        onChange={handleChange}
+        label={label}
+        inputRef={inputRef ?? undefined}
+      >
+        {options.map((option) => (
+          <MenuItem key={option.value} value={option.value}>
+            {option.label}
+          </MenuItem>
+        ))}
+      </Select>
+      {hasError && <FormHelperText>{errorText}</FormHelperText>}
+    </FormControl>
   );
 };

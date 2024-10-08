@@ -4,6 +4,13 @@ export const getDateTransform: GridValueGetter<any[number], unknown> = (
   value,
   row
 ) => {
+  return new Date(row.date);
+};
+
+export const getCreatedAtTransform: GridValueGetter<any[number], unknown> = (
+  value,
+  row
+) => {
   return new Date(row.createdAt);
 };
 

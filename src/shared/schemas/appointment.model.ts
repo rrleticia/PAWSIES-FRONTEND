@@ -1,31 +1,29 @@
 import Joi from "joi";
-import coreJoi from "joi";
-import joiDate from "@joi/date";
-
-const joi = coreJoi.extend(joiDate) as typeof coreJoi;
 
 export const AppointmentModel = Joi.object().keys({
-  id: Joi.string().trim().min(1),
-  date: joi.date().format("DD/MM/YYYY").required(),
+  id: Joi.string().trim().min(1).allow(""),
+  date: Joi.string()
+    .pattern(/^\d{2}\/\d{2}\/\d{4}$/)
+    .required()
+    .messages({
+      "string.pattern.base": "date must be in format DD/MM/YYYY",
+    }),
   hour: Joi.string()
-    .pattern(new RegExp("^[0-9]{2}-[0-9]{2}$"))
+    .pattern(new RegExp("^[0-9]{2}:[0-9]{2}$"))
     .custom((value, helpers) => {
       const [hours, minutes] = value.split("-").map(Number);
-
       if (hours < 0 || hours > 23) {
         return helpers.error("any.invalid", {
           message: "Invalid hour value. Must be between 00 and 23.",
         });
       }
-
       if (minutes < 0 || minutes > 59) {
         return helpers.error("any.invalid", {
           message: "Invalid minute value. Must be between 00 and 59.",
         });
       }
-
-      return value; // Valid
-    }, "Hour and Minute range validation")
+      return value;
+    }, "Hour and Minute validation")
     .required(),
   status: Joi.string()
     .trim()
@@ -77,4 +75,6 @@ export const AppointmentModel = Joi.object().keys({
   vetID: Joi.string().required(),
   petID: Joi.string().required(),
   ownerID: Joi.string().required(),
+  createdAt: Joi.date(),
+  updatedAt: Joi.date(),
 });
