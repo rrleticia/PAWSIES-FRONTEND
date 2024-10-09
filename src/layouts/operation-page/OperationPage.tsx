@@ -110,7 +110,6 @@ export const OperationPage = <T,>({
     event.preventDefault();
     console.log(formData);
     if (verifyErrors()) {
-      console.log("AQUI");
       const result = await ModelOperation(operation, service, id, formData);
       if (result instanceof Error) {
         handleMessageChange(result.message + ".");

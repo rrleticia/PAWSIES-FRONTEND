@@ -59,7 +59,6 @@ export const useAppointmentForm = (): FormHookType => {
 
   // Validate form data and set errors if any
   const verifyErrors = () => {
-    console.log(formData);
     const { error } = Validators["AppointmentSchema"].validate(formData, {
       abortEarly: false, // Collect all errors
     });
@@ -75,6 +74,7 @@ export const useAppointmentForm = (): FormHookType => {
     } else {
       // No errors, clear the errors
       setErrors({});
+      console.log("Form data is valid. Ready for submission:", formData);
       return true; // Return true if there are no validation errors
     }
   };

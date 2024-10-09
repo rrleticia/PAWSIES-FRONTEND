@@ -51,7 +51,6 @@ export const useOwnerForm = (): FormHookType => {
     });
 
     if (error) {
-      console.log(error);
       const newErrors: Partial<Record<keyof IOwnerHookJson, string>> = {};
       error.details.forEach((detail: any) => {
         const field = detail.path[0] as keyof IOwnerHookJson; // Explicitly type the field as keyof IOwnerJson
@@ -62,6 +61,7 @@ export const useOwnerForm = (): FormHookType => {
     } else {
       // No errors, clear the errors
       setErrors({});
+      console.log("Form data is valid. Ready for submission:", formData);
       return true; // Return true if there are no validation errors
     }
   };

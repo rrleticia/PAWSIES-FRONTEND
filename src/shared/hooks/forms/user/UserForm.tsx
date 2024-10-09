@@ -71,6 +71,7 @@ export const useUserForm = (): FormHookType => {
     } else {
       // No errors, clear the errors
       setErrors({});
+      console.log("Form data is valid. Ready for submission:", formData);
       return true; // Return true if there are no validation errors
     }
   };
