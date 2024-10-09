@@ -20,7 +20,6 @@ export const OwnerOperation = () => {
     handleFormData,
     errors,
     handleInputChange,
-    handlePasswordInit,
     verifyErrors,
     resetForm,
   } = useOwnerForm();
@@ -35,7 +34,6 @@ export const OwnerOperation = () => {
         handleFormData,
         errors,
         handleInputChange,
-        handlePasswordInit,
         verifyErrors,
         resetForm,
       }}

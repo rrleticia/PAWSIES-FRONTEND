@@ -28,6 +28,7 @@ const view = async <T>(service: any, id: string): Promise<T | Error> => {
 };
 
 const edit = async <T>(service: any, json: any): Promise<T | Error> => {
+  console.log(json.id);
   const result = await service.update(json);
   return result;
 };

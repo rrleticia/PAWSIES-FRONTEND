@@ -20,7 +20,6 @@ export const UserProfile = () => {
     handleFormData,
     errors,
     handleInputChange,
-    handlePasswordInit,
     verifyErrors,
     resetForm,
   } = useUserForm();
@@ -35,7 +34,6 @@ export const UserProfile = () => {
         handleFormData,
         errors,
         handleInputChange,
-        handlePasswordInit,
         verifyErrors,
         resetForm,
       }}

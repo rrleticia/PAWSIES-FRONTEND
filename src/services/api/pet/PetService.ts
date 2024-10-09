@@ -76,9 +76,9 @@ const create = async (json: any): Promise<IPet | Error> => {
   }
 };
 
-const update = async (id: string, json: any): Promise<IPet | Error> => {
+const update = async (json: any): Promise<IPet | Error> => {
   try {
-    const { data } = await Api.put(`/pet/${id}`, json);
+    const { data } = await Api.put(`/pet`, json);
 
     if (data) {
       return data;

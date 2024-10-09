@@ -134,7 +134,7 @@ const DatePicker: React.FC<IDatePickerProps> = ({
       <Box
         sx={{
           display: "flex",
-          width: "44%",
+          width: "40%",
           borderRadius: theme.spacing(1.5),
           alignItems: "center",
           marginX: theme.spacing(4),
@@ -142,7 +142,7 @@ const DatePicker: React.FC<IDatePickerProps> = ({
           backgroundColor: "white",
         }}
       >
-        <Typography
+        {/* <Typography
           sx={{
             fontWeight: 400,
             fontSize: "1rem",
@@ -151,15 +151,15 @@ const DatePicker: React.FC<IDatePickerProps> = ({
           }}
         >
           {`TODAY IS: ${formatDate(todayDate)}`}{" "}
-        </Typography>
-        <Divider
+        </Typography> */}
+        {/* <Divider
           orientation="vertical"
           flexItem
           sx={{
             borderRightWidth: 2,
             color: "text.primary",
           }}
-        />
+        /> */}
         <Typography
           sx={{
             flex: 1,
@@ -209,7 +209,7 @@ const DatePicker: React.FC<IDatePickerProps> = ({
       <Box
         sx={{
           display: "flex",
-          width: "45%",
+          width: "40%",
           justifyContent: "center",
           marginX: theme.spacing(4),
           marginTop: theme.spacing(2.5),
@@ -272,7 +272,7 @@ const HomeInfo: React.FC<IHomeInfoProps> = ({ count, completed }) => {
         marginTop: theme.spacing(4),
       }}
     >
-      <RoundedTitle text={"DATE: "} />
+      <RoundedTitle text={"DATE: " + formatDate(new Date())} />
       <RoundedTitle text={`${count} APPOINTMENTS`} />
       <RoundedTitle text={`${completed} COMPLETED`} />
       <RoundedFilledTitle text={"CLINIC SCHEDULE"} />

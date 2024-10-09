@@ -55,7 +55,7 @@ export const SearchInput: React.FC<ISearchInputProps> = ({
         elevation={0}
         sx={{
           display: "flex",
-          width: "100%",
+          width: "80%",
           height: "6rem",
           justifyContent: "center",
           marginRight: theme.spacing(4),
@@ -76,7 +76,7 @@ export const SearchInput: React.FC<ISearchInputProps> = ({
         ></CardMedia>
       </Card>
 
-      <Box sx={{ width: "40%" }}>
+      <Box sx={{ width: "50%" }}>
         <GreyCard full={0} height={"6rem"}>
           <Box
             sx={{

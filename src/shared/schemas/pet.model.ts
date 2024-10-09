@@ -1,4 +1,4 @@
-import Joi from 'joi';
+import Joi from "joi";
 
 export const PetModel = Joi.object().keys({
   id: Joi.string(),
@@ -10,7 +10,9 @@ export const PetModel = Joi.object().keys({
   type: Joi.string()
     .trim()
     .min(1)
-    .valid('cat', 'dog', 'unknown', 'CAT', 'DOG', 'UNKNOWN')
+    .valid("cat", "dog", "unknown", "CAT", "DOG", "UNKNOWN")
     .required(),
   ownerID: Joi.string().trim().min(1).required(),
+  createdAt: Joi.date(),
+  updatedAt: Joi.date(),
 });

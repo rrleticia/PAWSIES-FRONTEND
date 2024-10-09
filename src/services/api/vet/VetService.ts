@@ -56,9 +56,9 @@ const create = async (json: any): Promise<IVet | Error> => {
   }
 };
 
-const update = async (id: string, json: any): Promise<IVet | Error> => {
+const update = async (json: any): Promise<IVet | Error> => {
   try {
-    const { data } = await Api.put(`/vet/${id}`, json);
+    const { data } = await Api.put(`/vet`, json);
 
     if (data) {
       return data;

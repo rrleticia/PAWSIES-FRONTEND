@@ -2,6 +2,7 @@ import Box from "@mui/material/Box";
 import { InputBox, SelectBox, SideInputBox } from "../../components";
 import {
   examinationOptions,
+  formatDate,
   IAppointment,
   IAppointmentHookJson,
   statusOptions,
@@ -78,7 +79,11 @@ const AppointmentInput: React.FC<IAppointmentInputProps> = ({
             inputRef={dateRef}
             name={"date"}
             label={"DATE"}
-            value={formData.date}
+            value={
+              operation == "EDIT"
+                ? formatDate(new Date(formData.date))
+                : formData.date
+            }
             hasError={Boolean(errors.date)}
             errorText={errors.date || ""}
             handleChange={handleInputChange}

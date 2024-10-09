@@ -7,6 +7,7 @@ export const OwnerModel = Joi.object().keys({
   id: Joi.string(),
   name: Joi.string().trim().min(1).required(),
   username: Joi.string().trim().min(6).required(),
+  role: Joi.string().trim().uppercase().valid("OWNER", "owner"),
   email: Joi.string()
     .trim()
     .min(1)
@@ -26,4 +27,8 @@ export const OwnerModel = Joi.object().keys({
     .noWhiteSpaces()
     .onlyLatinCharacters()
     .doesNotInclude(["password", "12345678", "aaaaaaaa"]),
+  vetID: Joi.string().allow(null),
+  ownerID: Joi.string().allow(null),
+  createdAt: Joi.date(),
+  updatedAt: Joi.date(),
 });

@@ -8,7 +8,7 @@ export interface IVetHookJson {
   specialty: string;
   username: string;
   email: string;
-  password: string;
+  password?: string;
 }
 
 export const useVetForm = (): FormHookType => {
@@ -47,13 +47,6 @@ export const useVetForm = (): FormHookType => {
     });
   };
 
-  const handlePasswordInit = () => {
-    setFormData((prevFormData) => ({
-      ...prevFormData, // Spread the previous form data to preserve other fields
-      password: "PASSWORD WILL NOT BE SHOWN", // Override only the password field
-    }));
-  };
-
   // Validate form data and set errors if any
   const verifyErrors = () => {
     const { error } = Validators["VetSchema"].validate(formData, {
@@ -90,7 +83,6 @@ export const useVetForm = (): FormHookType => {
   return {
     formData,
     handleFormData: setFormData,
-    handlePasswordInit,
     errors,
     handleInputChange,
     verifyErrors,

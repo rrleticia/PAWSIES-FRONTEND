@@ -7,7 +7,7 @@ export interface IOwnerHookJson {
   name: string;
   username: string;
   email: string;
-  password: string;
+  password?: string;
 }
 
 export const useOwnerForm = (): FormHookType => {
@@ -44,13 +44,6 @@ export const useOwnerForm = (): FormHookType => {
     });
   };
 
-  const handlePasswordInit = () => {
-    setFormData((prevFormData) => ({
-      ...prevFormData, // Spread the previous form data to preserve other fields
-      password: "PASSWORD WILL NOT BE SHOWN", // Override only the password field
-    }));
-  };
-
   // Validate form data and set errors if any
   const verifyErrors = () => {
     const { error } = Validators["OwnerSchema"].validate(formData, {
@@ -58,6 +51,7 @@ export const useOwnerForm = (): FormHookType => {
     });
 
     if (error) {
+      console.log(error);
       const newErrors: Partial<Record<keyof IOwnerHookJson, string>> = {};
       error.details.forEach((detail: any) => {
         const field = detail.path[0] as keyof IOwnerHookJson; // Explicitly type the field as keyof IOwnerJson
@@ -86,7 +80,7 @@ export const useOwnerForm = (): FormHookType => {
   return {
     formData,
     handleFormData: setFormData,
-    handlePasswordInit,
+
     errors,
     handleInputChange,
     verifyErrors,

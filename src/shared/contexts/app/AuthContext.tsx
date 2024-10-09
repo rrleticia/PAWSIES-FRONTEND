@@ -9,6 +9,7 @@ interface IAuthContextData {
   login: (username: string, password: string) => Promise<boolean>;
   logout: () => void;
   access_token: string | undefined;
+  set_access_token: (value: string | undefined) => void;
   isAuthenticated: boolean;
 }
 
@@ -92,6 +93,7 @@ export const AuthProvider: React.FC<IAuthProviderProps> = ({ children }) => {
         login: handleLogin,
         logout: handleLogout,
         access_token: accessToken,
+        set_access_token: setAccessToken,
         isAuthenticated,
       }}
     >

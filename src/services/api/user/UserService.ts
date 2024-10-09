@@ -56,9 +56,9 @@ const create = async (json: any): Promise<IUser | Error> => {
   }
 };
 
-const update = async (id: string, json: any): Promise<IUser | Error> => {
+const update = async (json: any): Promise<IUser | Error> => {
   try {
-    const { data } = await Api.put(`/user/${id}`, json);
+    const { data } = await Api.put(`/user`, json);
 
     if (data) {
       return data;

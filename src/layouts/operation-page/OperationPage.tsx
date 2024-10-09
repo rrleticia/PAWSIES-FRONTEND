@@ -4,6 +4,7 @@ import {
   ModelOperation,
   OperationType,
   space,
+  useAuthContext,
   useOperationDialog,
   validOperation,
 } from "../../shared";
@@ -20,6 +21,7 @@ import { useTheme } from "@mui/material/styles";
 import Divider from "@mui/material/Divider";
 import Typography from "@mui/material/Typography";
 import { OperationDialog } from "./OperationDialog";
+import { Api } from "../../services";
 
 interface IOperationPageProps<T> {
   minHeight: string;
@@ -42,6 +44,8 @@ export const OperationPage = <T,>({
 
   const route_upper = route.toUpperCase();
 
+  const { access_token, set_access_token } = useAuthContext();
+
   const { id, operation, handleIDChange, handleOperationChange, resetDefault } =
     contextHook();
 
@@ -49,7 +53,6 @@ export const OperationPage = <T,>({
     formData,
     errors,
     handleFormData,
-    handlePasswordInit,
     verifyErrors,
     resetForm,
   }: FormHookType = operationForm;
@@ -70,12 +73,6 @@ export const OperationPage = <T,>({
     if (result instanceof Error) {
     } else {
       handleFormData(result);
-      if (
-        (route == "vet" || route == "owner" || route == "user") &&
-        handlePasswordInit
-      ) {
-        handlePasswordInit();
-      }
     }
   };
 
@@ -91,6 +88,14 @@ export const OperationPage = <T,>({
     }
   }, [handleIDChange, handleOperationChange]);
 
+  useEffect(() => {
+    if (access_token) {
+      Api.defaults.headers.common["Authorization"] = `${access_token}`;
+    } else {
+      delete Api.defaults.headers.common["Authorization"];
+    }
+  }, [set_access_token]);
+
   const disabledRegister = useMemo(() => {
     if (operation == "REGISTER") return false;
     else return true;
@@ -103,7 +108,9 @@ export const OperationPage = <T,>({
 
   const handleSubmit = async (event: React.FormEvent) => {
     event.preventDefault();
+    console.log(formData);
     if (verifyErrors()) {
+      console.log("AQUI");
       const result = await ModelOperation(operation, service, id, formData);
       if (result instanceof Error) {
         handleMessageChange(result.message + ".");

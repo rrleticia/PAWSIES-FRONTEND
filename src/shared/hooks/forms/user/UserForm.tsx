@@ -8,7 +8,7 @@ export interface IUserHookJson {
   role: string;
   username: string;
   email: string;
-  password: string;
+  password?: string;
 }
 
 export const useUserForm = (): FormHookType => {

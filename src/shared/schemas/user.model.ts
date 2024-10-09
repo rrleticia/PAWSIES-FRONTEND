@@ -39,4 +39,6 @@ export const UserModel = Joi.object().keys({
     .doesNotInclude(["password", "12345678", "aaaaaaaa"]),
   vetID: Joi.string().allow(null),
   ownerID: Joi.string().allow(null),
+  createdAt: Joi.date(),
+  updatedAt: Joi.date(),
 });

@@ -101,9 +101,9 @@ const create = async (json: any): Promise<IAppointment | Error> => {
   }
 };
 
-const update = async (id: string, json: any): Promise<IAppointment | Error> => {
+const update = async (json: any): Promise<IAppointment | Error> => {
   try {
-    const { data } = await Api.put(`/appointment/${id}`, json);
+    const { data } = await Api.put(`/appointment`, json);
 
     if (data) {
       return data;

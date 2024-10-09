@@ -1,4 +1,4 @@
-export * from "./appointments";
+export * from "./appointment";
 export * from "./error";
 export * from "./home";
 export * from "./login";

@@ -21,7 +21,6 @@ export const VetOperation = () => {
     handleFormData,
     errors,
     handleInputChange,
-    handlePasswordInit,
     verifyErrors,
     resetForm,
   } = useVetForm();
@@ -36,7 +35,7 @@ export const VetOperation = () => {
         handleFormData,
         errors,
         handleInputChange,
-        handlePasswordInit,
+
         verifyErrors,
         resetForm,
       }}
