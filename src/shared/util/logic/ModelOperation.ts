@@ -19,6 +19,7 @@ export const ModelOperation = async <T>(
 
 const register = async <T>(service: any, json: any): Promise<T | Error> => {
   const result = await service.create(json);
+  console.error("MODEL OPERATION ERROR:", result);
   return result;
 };
 
@@ -28,7 +29,6 @@ const view = async <T>(service: any, id: string): Promise<T | Error> => {
 };
 
 const edit = async <T>(service: any, json: any): Promise<T | Error> => {
-  console.log(json.id);
   const result = await service.update(json);
   return result;
 };

@@ -12,12 +12,14 @@ const getAll = async (): Promise<IUser[] | Error> => {
     return new Error(
       "Nenhum dado foi retornado ao tentar recuperar todos os users."
     );
-  } catch (error) {
-    console.error(error);
-    return new Error(
-      (error as { message: string }).message ||
-        "Erro ao tentar recuperar todos os users."
-    );
+  } catch (error: any) {
+    if (error.response && error.response.data) {
+      const message = error.response.data.message;
+      const status = error.response.data.status;
+      return new Error(`Error ${status}: ${message}`);
+    } else {
+      return new Error(`An unexpected error occurred: ${error.message}`);
+    }
   }
 };
 
@@ -30,12 +32,14 @@ const getOne = async (id: string): Promise<IUser | Error> => {
     }
 
     return new Error("Nenhum dado foi retornado ao tentar recuperar um user.");
-  } catch (error) {
-    console.error(error);
-    return new Error(
-      (error as { message: string }).message ||
-        "Erro ao tentar recuperar um user."
-    );
+  } catch (error: any) {
+    if (error.response && error.response.data) {
+      const message = error.response.data.message;
+      const status = error.response.data.status;
+      return new Error(`Error ${status}: ${message}`);
+    } else {
+      return new Error(`An unexpected error occurred: ${error.message}`);
+    }
   }
 };
 
@@ -48,11 +52,14 @@ const create = async (json: any): Promise<IUser | Error> => {
     }
 
     return new Error("Nenhum dado foi retornado ao tentar criar um user.");
-  } catch (error) {
-    console.error(error);
-    return new Error(
-      (error as { message: string }).message || "Erro ao tentar criar um user."
-    );
+  } catch (error: any) {
+    if (error.response && error.response.data) {
+      const message = error.response.data.message;
+      const status = error.response.data.status;
+      return new Error(`Error ${status}: ${message}`);
+    } else {
+      return new Error(`An unexpected error occurred: ${error.message}`);
+    }
   }
 };
 
@@ -65,12 +72,14 @@ const update = async (json: any): Promise<IUser | Error> => {
     }
 
     return new Error("Nenhum dado foi retornado ao tentar atualizar um user.");
-  } catch (error) {
-    console.error(error);
-    return new Error(
-      (error as { message: string }).message ||
-        "Erro ao tentar atualizar um user."
-    );
+  } catch (error: any) {
+    if (error.response && error.response.data) {
+      const message = error.response.data.message;
+      const status = error.response.data.status;
+      return new Error(`Error ${status}: ${message}`);
+    } else {
+      return new Error(`An unexpected error occurred: ${error.message}`);
+    }
   }
 };
 
@@ -83,12 +92,14 @@ const remove = async (id: string): Promise<IUser | Error> => {
     }
 
     return new Error("Nenhum dado foi retornado ao tentar deletar um user.");
-  } catch (error) {
-    console.error(error);
-    return new Error(
-      (error as { message: string }).message ||
-        "Erro ao tentar deletar um user."
-    );
+  } catch (error: any) {
+    if (error.response && error.response.data) {
+      const message = error.response.data.message;
+      const status = error.response.data.status;
+      return new Error(`Error ${status}: ${message}`);
+    } else {
+      return new Error(`An unexpected error occurred: ${error.message}`);
+    }
   }
 };
 

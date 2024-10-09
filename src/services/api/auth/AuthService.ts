@@ -1,4 +1,4 @@
-import { ILogin } from "../../../models";
+import { ILogin } from "../../../shared";
 import { Api } from "../axios-config";
 
 const auth = async (
@@ -16,11 +16,14 @@ const auth = async (
     }
 
     return new Error("Erro no login.");
-  } catch (error) {
-    console.error(error);
-    return new Error(
-      (error as { message: string }).message || "Erro no login."
-    );
+  } catch (error: any) {
+    if (error.response && error.response.data) {
+      const message = error.response.data.message;
+      const status = error.response.data.status;
+      return new Error(`Error ${status}: ${message}`);
+    } else {
+      return new Error(`An unexpected error occurred: ${error.message}`);
+    }
   }
 };
 
