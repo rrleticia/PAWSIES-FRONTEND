@@ -30,4 +30,14 @@ Api.interceptors.request.use(
   }
 );
 
+export const setAuthorizationToken = (token: string | undefined) => {
+  if (token) {
+    // Assert that headers are of the type 'any' to allow dynamic fields like 'Authorization'
+    (Api.defaults.headers as any).Authorization = `${token}`;
+  } else {
+    // Remove Authorization header if no token
+    delete (Api.defaults.headers as any).Authorization;
+  }
+};
+
 export { Api };

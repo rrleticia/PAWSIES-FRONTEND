@@ -108,8 +108,6 @@ const DatePicker: React.FC<IDatePickerProps> = ({
   const theme = useTheme();
   const { dateRef } = useInputMask();
 
-  const todayDate = new Date();
-
   const [loading, setLoading] = useState<boolean>(false);
 
   const [hasError, setHasError] = useState<boolean>(false);

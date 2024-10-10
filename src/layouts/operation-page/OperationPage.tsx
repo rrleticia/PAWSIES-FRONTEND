@@ -49,13 +49,8 @@ export const OperationPage = <T,>({
   const { id, operation, handleIDChange, handleOperationChange, resetDefault } =
     contextHook();
 
-  const {
-    formData,
-    errors,
-    handleFormData,
-    verifyErrors,
-    resetForm,
-  }: FormHookType = operationForm;
+  const { formData, handleFormData, verifyErrors, resetForm }: FormHookType =
+    operationForm;
 
   const {
     openResult,

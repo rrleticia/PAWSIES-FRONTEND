@@ -4,10 +4,10 @@ import {
   ModelOperation,
   OperationType,
   space,
+  useAuthContext,
   useOperationDialog,
-  validOperation,
 } from "../../shared";
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useState } from "react";
 import {
   GreenCard,
   GreyCard,
@@ -46,14 +46,8 @@ export const ProfilePage = <T,>({
   const { loginStatus, user, changeUser, operation, handleOperationChange } =
     contextHook();
 
-  const {
-    formData,
-
-    handleFormData,
-    handlePasswordInit,
-    verifyErrors,
-    resetForm,
-  }: FormHookType = operationForm;
+  const { formData, handleFormData, verifyErrors, resetForm }: FormHookType =
+    operationForm;
 
   const {
     openResult,
@@ -71,9 +65,6 @@ export const ProfilePage = <T,>({
     if (result instanceof Error) {
     } else {
       handleFormData(result);
-      if (handlePasswordInit) {
-        handlePasswordInit();
-      }
     }
   };
 
@@ -169,6 +160,8 @@ const OperationCard: React.FC<IOperationCardProps> = ({
   const theme = useTheme();
   const navigate = useNavigate();
 
+  const { logout } = useAuthContext();
+
   return (
     <Box
       sx={{
@@ -221,6 +214,14 @@ const OperationCard: React.FC<IOperationCardProps> = ({
             if (!disabledExisting) {
               handleOperationChange("EDIT");
             }
+          }}
+        ></RoundedSwitchButton>{" "}
+        <RoundedSwitchButton
+          text={"LOGOUT"}
+          filled={true}
+          disabled={false}
+          handleClick={() => {
+            logout();
           }}
         ></RoundedSwitchButton>
         <Box sx={{ display: "flex", flex: 1 }}></Box>

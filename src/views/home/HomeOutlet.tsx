@@ -21,7 +21,7 @@ export const HomeOutlet = () => {
   useEffect(() => {
     if (!isAuthenticated) navigate("/login");
   }, []);
-  
+
   return (
     <AppBarProvider>
       <OwnerProvider>

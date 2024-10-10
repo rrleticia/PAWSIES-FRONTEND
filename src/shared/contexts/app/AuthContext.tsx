@@ -2,7 +2,7 @@ import { createContext, useContext, useEffect, useMemo, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useCurrentUser } from "../../hooks";
 import { validateExpireStoredStringDate } from "../../util";
-import { AuthService } from "../../../services";
+import { AuthService, setAuthorizationToken } from "../../../services";
 import { useUserContext } from "./UserConext";
 
 interface IAuthContextData {
@@ -39,7 +39,9 @@ export const AuthProvider: React.FC<IAuthProviderProps> = ({ children }) => {
     const storedUserSession = sessionStorage.getItem(KEY_CURRENT_USER);
     if (sessionAccessToken && sessionExpireDate) {
       if (validateExpireStoredStringDate(sessionExpireDate)) {
-        setAccessToken(JSON.parse(sessionAccessToken));
+        const parsed_token = JSON.parse(sessionAccessToken);
+        setAccessToken(parsed_token);
+        setAuthorizationToken(parsed_token);
         if (storedUserSession) {
           changeUser(JSON.parse(storedUserSession));
           navigate("/home", { replace: true });
@@ -73,6 +75,7 @@ export const AuthProvider: React.FC<IAuthProviderProps> = ({ children }) => {
     sessionStorage.setItem(KEY_CURRENT_USER, JSON.stringify(result.loggedUser));
 
     setAccessToken(result.token);
+    setAuthorizationToken(result.token);
 
     navigate("/home", { replace: true });
     return true;
@@ -83,6 +86,7 @@ export const AuthProvider: React.FC<IAuthProviderProps> = ({ children }) => {
     sessionStorage.removeItem(KEY_EXPIRE_DATE);
     sessionStorage.removeItem(KEY_CURRENT_USER);
     setAccessToken(undefined);
+    setAuthorizationToken(undefined);
     changeUser(undefined);
     navigate("/login", { replace: true });
   };
