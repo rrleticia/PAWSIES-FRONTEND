@@ -24,7 +24,6 @@ export const AppointmentOperation = () => {
     handleFormData,
     errors,
     handleInputChange,
-    handlePasswordInit,
     verifyErrors,
     resetForm,
   } = useAppointmentForm();
@@ -39,7 +38,6 @@ export const AppointmentOperation = () => {
         handleFormData,
         errors,
         handleInputChange,
-        handlePasswordInit,
         verifyErrors,
         resetForm,
       }}

@@ -100,7 +100,7 @@ const OwnerInput: React.FC<IOwnerInputProps> = ({
           <InputBox
             name={"password"}
             label={"PASSWORD"}
-            value={formData.password}
+            value={formData.password ?? ""}
             hasError={Boolean(errors.password)}
             errorText={errors.password || ""}
             handleChange={handleInputChange}

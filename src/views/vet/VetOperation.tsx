@@ -118,7 +118,7 @@ const VetInput: React.FC<IVetInputProps> = ({
           <InputBox
             name={"password"}
             label={"PASSWORD"}
-            value={formData.password}
+            value={formData.password ?? ""}
             hasError={Boolean(errors.password)}
             errorText={errors.password || ""}
             handleChange={handleInputChange}
