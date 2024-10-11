@@ -7,5 +7,6 @@ export const validOperation = (
   if (operation == "NONE") return false;
   else if (operation == "REGISTER" && id != "NONE") return false;
   else if (operation != "REGISTER" && id == "NONE") return false;
+
   return true;
 };

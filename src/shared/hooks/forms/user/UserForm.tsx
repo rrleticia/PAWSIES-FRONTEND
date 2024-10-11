@@ -47,13 +47,6 @@ export const useUserForm = (): FormHookType => {
     });
   };
 
-  const handlePasswordInit = () => {
-    setFormData((prevFormData) => ({
-      ...prevFormData, // Spread the previous form data to preserve other fields
-      password: "PASSWORD WILL NOT BE SHOWN", // Override only the password field
-    }));
-  };
-
   // Validate form data and set errors if any
   const verifyErrors = () => {
     const { error } = Validators["UserSchema"].validate(formData, {
@@ -77,21 +70,19 @@ export const useUserForm = (): FormHookType => {
   };
 
   const resetForm = () => {
-    setFormData({
-      id: "",
+    setFormData((prevFormData) => ({
+      ...prevFormData, // Spread the previous form data to preserve other fields
       name: "",
-      role: "",
       username: "",
       email: "",
       password: "",
-    });
+    }));
     setErrors({});
   };
 
   return {
     formData,
     handleFormData: setFormData,
-    handlePasswordInit,
     errors,
     handleInputChange,
     verifyErrors,

@@ -2,7 +2,7 @@ import Box from "@mui/material/Box";
 import { space } from "../../shared";
 
 interface ISideInputBoxProps {
-  side: "left" | "right";
+  side: "left" | "right" | "none";
   children: React.ReactNode;
 }
 

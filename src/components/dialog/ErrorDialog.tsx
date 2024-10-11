@@ -6,6 +6,7 @@ import DialogTitle from "@mui/material/DialogTitle";
 import { useNavigate } from "react-router-dom";
 import DialogActions from "@mui/material/DialogActions";
 import Button from "@mui/material/Button";
+import { OperationType } from "../../shared";
 
 interface IErrorDialogProps {
   open: boolean;
@@ -15,6 +16,9 @@ interface IErrorDialogProps {
   operation: string;
 
   description: string;
+
+  handleIDChange?: (value: string | "NONE") => void;
+  handleOperationChange?: (value: OperationType | "NONE") => void;
 }
 
 export const ErrorDialog: React.FC<IErrorDialogProps> = ({
@@ -23,6 +27,8 @@ export const ErrorDialog: React.FC<IErrorDialogProps> = ({
   model,
   operation,
   description,
+  handleIDChange,
+  handleOperationChange,
 }) => {
   const navigate = useNavigate();
 
@@ -52,6 +58,10 @@ export const ErrorDialog: React.FC<IErrorDialogProps> = ({
           onClick={() => {
             toggleDialog();
             navigate(-1);
+            if (handleIDChange && handleOperationChange) {
+              handleIDChange("NONE");
+              handleOperationChange("NONE");
+            }
           }}
           autoFocus
         >

@@ -33,13 +33,16 @@ export const HomeOutlet = () => {
                   display: "flex",
                   flexDirection: "column",
                   minHeight: minHeight,
-
                   justifyContent: "space-between",
                 }}
               >
                 <>
                   <NavAppBar />
-                  <Outlet />
+                  <Box
+                    sx={{ display: "flex", flex: 1, flexDirection: "column" }}
+                  >
+                    <Outlet />
+                  </Box>
                 </>
 
                 <FooterBrand />

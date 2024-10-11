@@ -4,7 +4,7 @@ import { joiPasswordExtendCore } from "joi-password";
 const joiPassword = Joi.extend(joiPasswordExtendCore);
 
 export const VetModel = Joi.object().keys({
-  id: Joi.string(),
+  id: Joi.string().trim().min(1).allow(""),
   name: Joi.string().trim().min(1).required(),
   specialty: Joi.string()
     .trim()

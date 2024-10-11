@@ -1,5 +1,6 @@
 import { useNavigate } from "react-router-dom";
 import {
+  formatDate,
   FormHookType,
   ModelOperation,
   OperationType,
@@ -67,6 +68,10 @@ export const OperationPage = <T,>({
     const result = await service.getOne(id);
     if (result instanceof Error) {
     } else {
+      if (result.date) {
+        const date = new Date(result.date);
+        result.date = formatDate(date);
+      }
       handleFormData(result);
     }
   };
@@ -106,6 +111,7 @@ export const OperationPage = <T,>({
     console.log(formData);
     if (verifyErrors()) {
       const result = await ModelOperation(operation, service, id, formData);
+      console.log("result", result);
       if (result instanceof Error) {
         handleMessageChange(result.message + ".");
         toggleError();
@@ -116,51 +122,51 @@ export const OperationPage = <T,>({
   };
 
   return (
-    <form onSubmit={handleSubmit}>
-      <Box
-        sx={{
-          display: "flex",
-          flex: 1,
-          height: "100%",
-          width: "100%",
-          justifyContent: "center",
+    <Box
+      component="form"
+      onSubmit={handleSubmit}
+      sx={{
+        display: "flex",
+        flex: 1,
+        minHeight: "100%",
+        width: "100%",
+        justifyContent: "center",
+      }}
+    >
+      <OperationCard
+        minHeight={minHeight}
+        operation={operation}
+        handleOperationChange={handleOperationChange}
+        disabledRegister={disabledRegister}
+        disabledExisting={disabledExisting}
+        resetForm={resetForm}
+        toggleCancel={toggleCancel}
+      ></OperationCard>
+      <InputCard
+        minHeight={minHeight}
+        route_upper={route_upper}
+        children={children}
+      ></InputCard>
+      <OperationDialog
+        model={route}
+        operation={operation}
+        description={errorMessage}
+        openResult={openResult}
+        toggleResult={toggleResult}
+        openError={openError}
+        toggleError={toggleError}
+        openCancel={openCancel}
+        toggleCancel={toggleCancel}
+        handleCancelation={() => {
+          resetForm();
+          handleIDChange("NONE");
+          handleOperationChange("NONE");
+          navigate(-1);
         }}
-      >
-        <OperationCard
-          minHeight={minHeight}
-          operation={operation}
-          handleOperationChange={handleOperationChange}
-          disabledRegister={disabledRegister}
-          disabledExisting={disabledExisting}
-          resetForm={resetForm}
-          toggleCancel={toggleCancel}
-        ></OperationCard>
-
-        <InputCard
-          minHeight={minHeight}
-          route_upper={route_upper}
-          children={children}
-        ></InputCard>
-
-        <OperationDialog
-          model={route}
-          operation={operation}
-          description={errorMessage}
-          openResult={openResult}
-          toggleResult={toggleResult}
-          openError={openError}
-          toggleError={toggleError}
-          openCancel={openCancel}
-          toggleCancel={toggleCancel}
-          handleCancelation={() => {
-            resetForm();
-            handleIDChange("NONE");
-            handleOperationChange("NONE");
-            navigate(-1);
-          }}
-        ></OperationDialog>
-      </Box>
-    </form>
+        handleIDChange={handleIDChange}
+        handleOperationChange={handleOperationChange}
+      ></OperationDialog>
+    </Box>
   );
 };
 

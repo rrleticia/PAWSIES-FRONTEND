@@ -1,4 +1,5 @@
 import { ResultDialog, ErrorDialog, CancelationDialog } from "../../components";
+import { OperationType } from "../../shared";
 
 interface IOperationDialogPorops {
   model: string;
@@ -11,6 +12,8 @@ interface IOperationDialogPorops {
   openCancel: boolean;
   toggleCancel: () => void;
   handleCancelation?: () => void;
+  handleIDChange?: (value: string | "NONE") => void;
+  handleOperationChange?: (value: OperationType | "NONE") => void;
 }
 
 export const OperationDialog: React.FC<IOperationDialogPorops> = ({
@@ -24,8 +27,11 @@ export const OperationDialog: React.FC<IOperationDialogPorops> = ({
   openCancel,
   toggleCancel,
   handleCancelation = () => {},
+  handleIDChange,
+  handleOperationChange,
 }) => {
   const dialogOperation = operation.toLowerCase();
+
   return (
     <>
       <ResultDialog
@@ -33,6 +39,8 @@ export const OperationDialog: React.FC<IOperationDialogPorops> = ({
         toggleDialog={toggleResult}
         operation={dialogOperation}
         model={model}
+        handleIDChange={handleIDChange}
+        handleOperationChange={handleOperationChange}
       ></ResultDialog>
       <ErrorDialog
         open={openError}
@@ -40,6 +48,8 @@ export const OperationDialog: React.FC<IOperationDialogPorops> = ({
         operation={dialogOperation}
         model={model}
         description={description}
+        handleIDChange={handleIDChange}
+        handleOperationChange={handleOperationChange}
       ></ErrorDialog>
       <CancelationDialog
         open={openCancel}
@@ -47,6 +57,8 @@ export const OperationDialog: React.FC<IOperationDialogPorops> = ({
         model={model}
         operation={dialogOperation}
         handleCancelation={handleCancelation}
+        handleIDChange={handleIDChange}
+        handleOperationChange={handleOperationChange}
       ></CancelationDialog>
     </>
   );

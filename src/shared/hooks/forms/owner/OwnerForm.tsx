@@ -49,6 +49,7 @@ export const useOwnerForm = (): FormHookType => {
     const { error } = Validators["OwnerSchema"].validate(formData, {
       abortEarly: false, // Collect all errors
     });
+    console.log(error);
 
     if (error) {
       const newErrors: Partial<Record<keyof IOwnerHookJson, string>> = {};
@@ -67,13 +68,13 @@ export const useOwnerForm = (): FormHookType => {
   };
 
   const resetForm = () => {
-    setFormData({
-      id: "",
+    setFormData((prevFormData) => ({
+      ...prevFormData, // Spread the previous form data to preserve other fields
       name: "",
       username: "",
       email: "",
       password: "",
-    });
+    }));
     setErrors({});
   };
 

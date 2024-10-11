@@ -24,6 +24,8 @@ export const RoundedButton: React.FC<IRoundedButtonProps> = ({
         display: "flex",
         width: width ?? "auto",
 
+        marginX: space.two_space,
+
         paddingX: space.five_space,
 
         borderColor: "primary.contrastText",

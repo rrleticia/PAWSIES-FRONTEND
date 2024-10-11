@@ -26,13 +26,13 @@ export const OptionsMenu: React.FC<IOptionsMenuProps> = ({
   contextHook,
 }) => {
   const navigate = useNavigate();
-  const { operation, handleIDChange, handleOperationChange } = contextHook();
+  const { handleIDChange, handleOperationChange } = contextHook();
 
   const handleClick = (choosenOperation: OperationType) => {
-    if (operation != "REGISTER") {
+    handleOperationChange(choosenOperation);
+    if (choosenOperation != "REGISTER") {
       handleIDChange(choosenID);
     }
-    handleOperationChange(choosenOperation);
     navigate(`/${type}/operation`);
   };
 

@@ -1,16 +1,18 @@
 import Box from "@mui/material/Box";
 import { InputBox, SelectBox, SideInputBox } from "../../components";
 import {
+  IOwner,
   IPet,
   IPetHookJson,
   petTypeOptions,
+  SelectType,
   usePetContext,
   usePetForm,
 } from "../../shared";
 import { useTheme } from "@mui/material/styles";
-import { PetService } from "../../services";
+import { OwnerService, PetService } from "../../services";
 import { OperationPage } from "../../layouts";
-import { useMemo } from "react";
+import { useEffect, useMemo, useState } from "react";
 
 export const PetOperation = () => {
   const theme = useTheme();
@@ -21,7 +23,6 @@ export const PetOperation = () => {
     handleFormData,
     errors,
     handleInputChange,
-    handlePasswordInit,
     verifyErrors,
     resetForm,
   } = usePetForm();
@@ -36,7 +37,6 @@ export const PetOperation = () => {
         handleFormData,
         errors,
         handleInputChange,
-        handlePasswordInit,
         verifyErrors,
         resetForm,
       }}
@@ -67,6 +67,29 @@ const PetInput: React.FC<IPetInputProps> = ({
 
   const disabled: boolean = useMemo(() => operation == "VIEW", [operation]);
 
+  const [ownersOptions, setOwnersOptions] = useState<SelectType[]>([]);
+
+  const fetchData = async () => {
+    try {
+      const result = await OwnerService.getAll();
+      if (result instanceof Error) {
+        console.error("Erro ao buscar dados dos owners", result);
+      } else {
+        const listed = result.map((r: any) => ({
+          label: r.username,
+          value: r.ownerID,
+        }));
+        setOwnersOptions(listed);
+      }
+    } catch (error) {
+      console.error("Erro inesperado ao buscar dados", error);
+    }
+  };
+
+  useEffect(() => {
+    fetchData();
+  }, []);
+
   return (
     <>
       <Box sx={{ display: "flex", flexDirection: "row", width: "100%" }}>
@@ -81,7 +104,22 @@ const PetInput: React.FC<IPetInputProps> = ({
             disabled={disabled}
           ></InputBox>
         </SideInputBox>
+
         <SideInputBox side={"right"}>
+          <SelectBox
+            name={"ownerID"}
+            label={"OWNER"}
+            value={formData.ownerID}
+            hasError={Boolean(errors.ownerID)}
+            errorText={errors.ownerID || ""}
+            handleChange={handleInputChange}
+            disabled={disabled}
+            options={ownersOptions}
+          ></SelectBox>
+        </SideInputBox>
+      </Box>
+      <Box sx={{ display: "flex", flexDirection: "row", width: "100%" }}>
+        <SideInputBox side={"left"}>
           <SelectBox
             name={"type"}
             label={"TYPE"}
@@ -93,9 +131,7 @@ const PetInput: React.FC<IPetInputProps> = ({
             options={petTypeOptions}
           ></SelectBox>
         </SideInputBox>
-      </Box>
-      <Box sx={{ display: "flex", flexDirection: "row", width: "100%" }}>
-        <SideInputBox side={"left"}>
+        <SideInputBox side={"right"}>
           <InputBox
             name={"breed"}
             label={"BREED"}
@@ -106,7 +142,9 @@ const PetInput: React.FC<IPetInputProps> = ({
             disabled={disabled}
           ></InputBox>
         </SideInputBox>
-        <SideInputBox side={"right"}>
+      </Box>
+      <Box sx={{ display: "flex", flexDirection: "row", width: "100%" }}>
+        <SideInputBox side={"left"}>
           <InputBox
             name={"color"}
             label={"COLOR"}
@@ -117,9 +155,7 @@ const PetInput: React.FC<IPetInputProps> = ({
             disabled={disabled}
           ></InputBox>
         </SideInputBox>
-      </Box>
-      <Box sx={{ display: "flex", flexDirection: "row", width: "100%" }}>
-        <SideInputBox side={"left"}>
+        <SideInputBox side={"none"}>
           <InputBox
             name={"age"}
             label={"AGE"}

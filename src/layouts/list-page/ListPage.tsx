@@ -33,6 +33,7 @@ export const ListPage = <T,>({
   columns,
   contextHook,
 }: IListPageProps<T>) => {
+  const [reset, setReset] = useState<boolean>(false);
   const [loading, setLoading] = useState<boolean>(false);
   const [openDialog, setOpenDialog] = useState<boolean>(false);
   const [messageDialog, setMessageDialog] = useState<string>("");
@@ -54,16 +55,22 @@ export const ListPage = <T,>({
     setLoading(true);
     getRows();
     setLoading(false);
-  }, []);
+  }, [reset]);
 
   return (
     <Box sx={{ displat: "flex", flex: 1 }}>
-      <SearchByID<T>
+      <SearchByField<T>
         route={route}
         setRows={setRows}
         service={service}
-      ></SearchByID>
-      <PageInfo route={route} count={count} contextHook={contextHook} />
+      ></SearchByField>
+      <PageInfo
+        route={route}
+        count={count}
+        contextHook={contextHook}
+        reset={reset}
+        setReset={setReset}
+      />
       <PageDataGrid columns={columns} pageRows={rows} />
       <ListDialog
         model={route}
@@ -77,13 +84,17 @@ export const ListPage = <T,>({
   );
 };
 
-interface ISearchByIDProps<T> {
+interface ISearchByFieldProps<T> {
   route: string;
   setRows: (value: T[]) => void;
   service: any;
 }
 
-const SearchByID = <T,>({ route, setRows, service }: ISearchByIDProps<T>) => {
+const SearchByField = <T,>({
+  route,
+  setRows,
+  service,
+}: ISearchByFieldProps<T>) => {
   if (route == "pet" || route == "appointment")
     return (
       <SearchInput
@@ -98,9 +109,17 @@ interface IPageInfoProps {
   route: string;
   count: Number;
   contextHook: () => any;
+  reset: boolean;
+  setReset: (value: boolean) => void;
 }
 
-const PageInfo: React.FC<IPageInfoProps> = ({ route, count, contextHook }) => {
+const PageInfo: React.FC<IPageInfoProps> = ({
+  route,
+  count,
+  contextHook,
+  reset,
+  setReset,
+}) => {
   const theme = useTheme();
   const navigate = useNavigate();
 
@@ -129,8 +148,37 @@ const PageInfo: React.FC<IPageInfoProps> = ({ route, count, contextHook }) => {
         text={`NEW ${route_upper}`}
         handleClick={handleNewPage}
       ></RoundedButton>
+      <SearchReset
+        route={route}
+        reset={reset}
+        setReset={setReset}
+      ></SearchReset>
     </Box>
   );
+};
+
+interface ISearchResetProps {
+  route: string;
+  reset: boolean;
+  setReset: (value: boolean) => void;
+}
+
+const SearchReset: React.FC<ISearchResetProps> = ({
+  route,
+  reset,
+  setReset,
+}) => {
+  if (route == "pet" || route == "appointment")
+    return (
+      <Box>
+        <RoundedButton
+          text={`RESET SEARCH`}
+          handleClick={() => {
+            setReset(!reset);
+          }}
+        ></RoundedButton>
+      </Box>
+    );
 };
 
 interface IPageDataGridProps {

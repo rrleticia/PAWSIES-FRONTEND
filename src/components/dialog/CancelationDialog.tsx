@@ -6,6 +6,7 @@ import DialogContent from "@mui/material/DialogContent";
 import DialogContentText from "@mui/material/DialogContentText";
 import DialogTitle from "@mui/material/DialogTitle";
 import { useNavigate } from "react-router-dom";
+import { OperationType } from "../../shared";
 
 interface ICancelatonDialogProps {
   open: boolean;
@@ -13,6 +14,8 @@ interface ICancelatonDialogProps {
   model: string;
   operation: string;
   handleCancelation: () => void;
+  handleIDChange?: (value: string | "NONE") => void;
+  handleOperationChange?: (value: OperationType | "NONE") => void;
 }
 
 export const CancelationDialog: React.FC<ICancelatonDialogProps> = ({
@@ -21,12 +24,10 @@ export const CancelationDialog: React.FC<ICancelatonDialogProps> = ({
   model,
   operation,
   handleCancelation,
+  handleIDChange,
+  handleOperationChange,
 }) => {
   const navigate = useNavigate();
-
-  const handleBack = () => {
-    navigate(-1);
-  };
 
   return (
     <Dialog open={open} onClose={toggleDialog}>
@@ -53,7 +54,11 @@ export const CancelationDialog: React.FC<ICancelatonDialogProps> = ({
           onClick={() => {
             handleCancelation();
             toggleDialog();
-            handleBack();
+            navigate(-1);
+            if (handleIDChange && handleOperationChange) {
+              handleIDChange("NONE");
+              handleOperationChange("NONE");
+            }
           }}
           autoFocus
         >
