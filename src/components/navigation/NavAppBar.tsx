@@ -8,6 +8,7 @@ import { space, useAppBarContext } from "../../shared";
 import { AppBarButton } from "../button";
 import { useLayoutEffect, useRef } from "react";
 import { Logo } from "../logo";
+import { useNavigate } from "react-router-dom";
 
 interface IHideOnScrollProps {
   style?: any;
@@ -31,6 +32,7 @@ interface INavAppBarProps {}
 
 export const NavAppBar: React.FC<INavAppBarProps> = ({}) => {
   const theme = useTheme();
+  const navigate = useNavigate();
 
   const myRef = useRef<HTMLDivElement>(null);
   const { handleHeight } = useAppBarContext();
@@ -78,21 +80,15 @@ export const NavAppBar: React.FC<INavAppBarProps> = ({}) => {
             >
               <AppBarButton
                 text={"CLINIC"}
-                handleClick={function (): {} {
-                  throw new Error("Function not implemented.");
-                }}
+                handleClick={() => navigate("/home")}
               />
               <AppBarButton
                 text={"APPOINTMENTS"}
-                handleClick={function (): {} {
-                  throw new Error("Function not implemented.");
-                }}
+                handleClick={() => navigate("/appointment")}
               />
               <AppBarButton
                 text={"VETS"}
-                handleClick={function (): {} {
-                  throw new Error("Function not implemented.");
-                }}
+                handleClick={() => navigate("/vet")}
               />
             </Container>
 
@@ -116,21 +112,15 @@ export const NavAppBar: React.FC<INavAppBarProps> = ({}) => {
             >
               <AppBarButton
                 text={"PETS"}
-                handleClick={function (): {} {
-                  throw new Error("Function not implemented.");
-                }}
+                handleClick={() => navigate("/pet")}
               />
               <AppBarButton
                 text={"OWNER"}
-                handleClick={function (): {} {
-                  throw new Error("Function not implemented.");
-                }}
+                handleClick={() => navigate("/owner")}
               />
               <AppBarButton
                 text={"PROFILE"}
-                handleClick={function (): {} {
-                  throw new Error("Function not implemented.");
-                }}
+                handleClick={() => navigate("/profile")}
               />
             </Container>
           </Toolbar>

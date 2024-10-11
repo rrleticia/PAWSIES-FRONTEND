@@ -1,3 +1,4 @@
+export * from "./appointment.status.enum";
 export * from "./examination.enum";
 export * from "./pet.enum";
 export * from "./role.enum";

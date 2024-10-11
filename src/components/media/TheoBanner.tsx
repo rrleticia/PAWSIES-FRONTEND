@@ -1,6 +1,6 @@
 import Box from "@mui/material/Box";
 import CardMedia from "@mui/material/CardMedia";
-import TheoHomeImage from "/assets/Home.jpg";
+import TheoHomeImage from "../../assets/Home.jpg";
 import { useTheme } from "@mui/material/styles";
 import Typography from "@mui/material/Typography";
 

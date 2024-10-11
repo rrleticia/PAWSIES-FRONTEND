@@ -1,23 +1,13 @@
-import { Api } from '../axios-config';
-
-export type UserType = {
-  role: string;
-  username: string;
-  password?: string;
-};
-
-interface IAuth {
-  accessToken: string;
-  user: UserType;
-}
+import { ILogin } from "../../../shared";
+import { Api } from "../axios-config";
 
 const auth = async (
-  username: string,
+  email: string,
   password: string
-): Promise<IAuth | Error> => {
+): Promise<ILogin | Error> => {
   try {
-    const { data } = await Api.post('/auth/login', {
-      username: username,
+    const { data } = await Api.post("/auth/login", {
+      email: email,
       password: password,
     });
 
@@ -25,62 +15,18 @@ const auth = async (
       return data;
     }
 
-    return new Error('Erro no login.');
-  } catch (error) {
-    console.error(error);
-    return new Error(
-      (error as { message: string }).message || 'Erro no login.'
-    );
-  }
-};
-
-const requestPasswordReset = async (email: string): Promise<IAuth | Error> => {
-  try {
-    const { data } = await Api.post('/auth/request-reset-password', {
-      email: email,
-    });
-
-    if (data) {
-      return data;
+    return new Error("Erro no login.");
+  } catch (error: any) {
+    if (error.response && error.response.data) {
+      const message = error.response.data.message;
+      const status = error.response.data.status;
+      return new Error(`Error ${status}: ${message}`);
+    } else {
+      return new Error(`An unexpected error occurred: ${error.message}`);
     }
-
-    return new Error('Erro no pedido.');
-  } catch (error) {
-    console.error(error);
-    return new Error(
-      (error as { message: string }).message || 'Erro no pedido.'
-    );
-  }
-};
-
-const resetPassword = async (
-  idUser: string,
-  codigo: string,
-  newPassword: string
-): Promise<string | Error> => {
-  try {
-    const { data } = await Api.post(
-      `/auth/reset-password/${idUser}/${codigo}`,
-      {
-        newPassword: newPassword,
-      }
-    );
-
-    if (data) {
-      return data.message;
-    }
-
-    return new Error('Erro na redefinição de senha.');
-  } catch (error) {
-    console.error(error);
-    return new Error(
-      (error as { message: string }).message || 'Erro na redefinição de senha.'
-    );
   }
 };
 
 export const AuthService = {
   auth,
-  requestPasswordReset,
-  resetPassword,
 };

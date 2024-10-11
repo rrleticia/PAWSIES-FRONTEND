@@ -6,37 +6,19 @@ export const useInputMask = () => {
     replacement: { _: /\d/ },
   });
 
-  const openHourRef = useMask({
+  const hourRef = useMask({
     mask: "__:__",
     replacement: { _: /\d/ },
   });
 
-  const closeHourRef = useMask({
-    mask: "__:__",
-    replacement: { _: /\d/ },
-  });
-
-  const currentDate = useMask({
-    mask: "__/__/____",
-    replacement: { _: /\d/ },
-  });
-
-  const startDateRef = useMask({
-    mask: "__/__/____",
-    replacement: { _: /\d/ },
-  });
-
-  const endDateRef = useMask({
+  const dateRef = useMask({
     mask: "__/__/____",
     replacement: { _: /\d/ },
   });
 
   return {
     phoneRef,
-    openHourRef,
-    closeHourRef,
-    currentDate,
-    startDateRef,
-    endDateRef,
+    hourRef,
+    dateRef,
   };
 };

@@ -1,10 +1,11 @@
 import { OperationType } from "../../interfaces";
 
 export const validOperation = (
-  id: string | undefined,
-  operation: OperationType | undefined
+  id: string | "NONE",
+  operation: OperationType | "NONE"
 ): boolean => {
-  if (!operation) return false;
-  else if (operation == "REGISTER" && id) return false;
+  if (operation == "NONE") return false;
+  else if (operation == "REGISTER" && id != "NONE") return false;
+  else if (operation != "REGISTER" && id == "NONE") return false;
   return true;
 };

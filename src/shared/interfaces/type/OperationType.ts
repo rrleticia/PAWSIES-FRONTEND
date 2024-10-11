@@ -1,1 +1,1 @@
-export type OperationType = "VIEW" | "REGISTER" | "UPDATE" | "DELETE";
+export type OperationType = "VIEW" | "REGISTER" | "EDIT" | "DELETE";

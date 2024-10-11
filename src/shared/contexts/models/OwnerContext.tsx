@@ -1,12 +1,12 @@
-export * from "./OwnerContext";
+
 import { createContext, useContext, useState } from "react";
 import { OperationType } from "../../interfaces";
 
 interface IOwnerContextData {
-  id: string | undefined;
-  operation: OperationType | undefined;
-  handleIDChange: (value: string | undefined) => void;
-  handleOperationChange: (value: OperationType | undefined) => void;
+  id: string | "NONE";
+  operation: OperationType | "NONE";
+  handleIDChange: (value: string | "NONE") => void;
+  handleOperationChange: (value: OperationType | "NONE") => void;
   resetDefault: () => void;
 }
 
@@ -17,14 +17,14 @@ interface IOwnerProviderProps {
 }
 
 export const OwnerProvider: React.FC<IOwnerProviderProps> = ({ children }) => {
-  const [currentID, setCurrentID] = useState<string | undefined>();
+  const [currentID, setCurrentID] = useState<string | "NONE">("NONE");
   const [currentOperation, setCurrentOperation] = useState<
-    OperationType | undefined
-  >();
+    OperationType | "NONE"
+  >("NONE");
 
   const resetDefault = (): void => {
-    setCurrentID(undefined);
-    setCurrentOperation(undefined);
+    setCurrentID("NONE");
+    setCurrentOperation("NONE");
   };
 
   return (

@@ -8,4 +8,7 @@ export default defineConfig({
     cors: true,
   },
   plugins: [react()],
+  optimizeDeps: {
+    exclude: ["moment", "@joi/date"],
+  },
 });

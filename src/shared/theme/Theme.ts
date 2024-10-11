@@ -125,6 +125,7 @@ const themeOptions: ThemeOptions = {
       xl: 1536,
     },
   },
+
   components: {
     MuiDataGrid: {
       styleOverrides: {
