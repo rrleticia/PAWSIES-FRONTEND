@@ -23,9 +23,9 @@ const getAll = async (): Promise<IPet[] | Error> => {
   }
 };
 
-const search = async (id: string): Promise<IPet[] | Error> => {
+const search = async (username: string): Promise<IPet[] | Error> => {
   try {
-    const { data } = await Api.get(`/pet/owner/${id}`);
+    const { data } = await Api.get(`/pet/owner/${username}`);
 
     if (data) {
       return data;

@@ -5,7 +5,7 @@ import Divider from "@mui/material/Divider";
 import Button from "@mui/material/Button";
 import CardMedia from "@mui/material/CardMedia";
 import GordaSearchImage from "../../assets/Gorda.jpg";
-import { search, validateString } from "../../shared";
+import { validateString } from "../../shared";
 import { useState } from "react";
 import Card from "@mui/material/Card";
 
@@ -30,15 +30,21 @@ export const SearchInput: React.FC<ISearchInputProps> = ({
     else return "??";
   };
 
+  const field_name = () => {
+    if (route_upper == "PET") return "USERNAME";
+    if (route_upper == "APPOINTMENT") return "NAME";
+    else return "??";
+  };
+
   const [loading, setLoading] = useState<boolean>(false);
-  const [id, setID] = useState<string>("");
+  const [field, setField] = useState<string>("");
   const [hasError, setHasError] = useState<boolean>(false);
 
   const handleClick = async () => {
     setLoading(true);
-    setHasError(!validateString(id));
+    setHasError(!validateString(field));
     if (!hasError) {
-      const result = await service.search(id, route);
+      const result = await service.search(field, route);
       if (result instanceof Error) {
       } else {
         setRows(result);
@@ -55,7 +61,7 @@ export const SearchInput: React.FC<ISearchInputProps> = ({
         elevation={0}
         sx={{
           display: "flex",
-          width: "80%",
+          width: "100%",
           height: "6rem",
           justifyContent: "center",
           marginRight: theme.spacing(4),
@@ -88,11 +94,13 @@ export const SearchInput: React.FC<ISearchInputProps> = ({
           >
             <SearchInputBox
               name={route + "-search"}
-              label={`PICK A/AN ${search_upper()} ID`}
-              value={id}
+              label={`PICK A/AN ${search_upper()} ${field_name()}`}
+              value={field}
               hasError={hasError}
-              errorText={hasError ? "Please provide a valid id." : ""}
-              handleChange={setID}
+              errorText={
+                hasError ? `Please provide a valid ${field_name()}.` : ""
+              }
+              handleChange={setField}
               disabled={loading}
             ></SearchInputBox>
             <Divider

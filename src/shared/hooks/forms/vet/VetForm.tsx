@@ -70,14 +70,15 @@ export const useVetForm = (): FormHookType => {
   };
 
   const resetForm = () => {
-    setFormData({
-      id: "",
+    setFormData((prevFormData) => ({
+      ...prevFormData, // Spread the previous form data to preserve other fields
+
       name: "",
       specialty: "",
       username: "",
       email: "",
       password: "",
-    });
+    }));
     setErrors({});
   };
 

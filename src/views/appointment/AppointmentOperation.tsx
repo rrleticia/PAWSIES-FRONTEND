@@ -5,15 +5,21 @@ import {
   formatDate,
   IAppointment,
   IAppointmentHookJson,
+  SelectType,
   statusOptions,
   useAppointmentContext,
   useAppointmentForm,
   useInputMask,
 } from "../../shared";
 import { useTheme } from "@mui/material/styles";
-import { AppointmentService } from "../../services";
+import {
+  AppointmentService,
+  OwnerService,
+  PetService,
+  VetService,
+} from "../../services";
 import { OperationPage } from "../../layouts";
-import { useMemo } from "react";
+import { useEffect, useMemo, useState } from "react";
 
 export const AppointmentOperation = () => {
   const theme = useTheme();
@@ -69,6 +75,67 @@ const AppointmentInput: React.FC<IAppointmentInputProps> = ({
 
   const disabled: boolean = useMemo(() => operation == "VIEW", [operation]);
 
+  const [petsOptions, setPetsOptions] = useState<SelectType[]>([]);
+  const [ownersOptions, setOwnersOptions] = useState<SelectType[]>([]);
+  const [vetsOptions, setVetsOptions] = useState<SelectType[]>([]);
+
+  const fetchDataPet = async () => {
+    try {
+      const result = await PetService.getAll();
+      if (result instanceof Error) {
+        console.error("Erro ao buscar dados dos pets", result);
+      } else {
+        const listed = result.map((r: any) => ({
+          label: r.name,
+          value: r.id,
+        }));
+        setPetsOptions(listed);
+      }
+    } catch (error) {
+      console.error("Erro inesperado ao buscar dados", error);
+    }
+  };
+
+  const fetchDataOwner = async () => {
+    try {
+      const result = await OwnerService.getAll();
+      if (result instanceof Error) {
+        console.error("Erro ao buscar dados dos owners", result);
+      } else {
+        const listed = result.map((r: any) => ({
+          label: r.username,
+          value: r.ownerID,
+        }));
+        setOwnersOptions(listed);
+      }
+    } catch (error) {
+      console.error("Erro inesperado ao buscar dados", error);
+    }
+  };
+
+  const fetchDataVet = async () => {
+    try {
+      const result = await VetService.getAll();
+      if (result instanceof Error) {
+        console.error("Erro ao buscar dados dos vets", result);
+      } else {
+        const listed = result.map((r: any) => ({
+          label: r.username,
+          value: r.vetID,
+        }));
+        setVetsOptions(listed);
+      }
+    } catch (error) {
+      console.error("Erro inesperado ao buscar dados", error);
+    }
+  };
+
+  useEffect(() => {
+    fetchDataPet();
+    fetchDataOwner();
+    fetchDataVet();
+  }, []);
+
   return (
     <>
       <Box sx={{ display: "flex", flexDirection: "row", width: "100%" }}>
@@ -77,11 +144,7 @@ const AppointmentInput: React.FC<IAppointmentInputProps> = ({
             inputRef={dateRef}
             name={"date"}
             label={"DATE"}
-            value={
-              operation == "EDIT"
-                ? formatDate(new Date(formData.date))
-                : formData.date
-            }
+            value={formData.date}
             hasError={Boolean(errors.date)}
             errorText={errors.date || ""}
             handleChange={handleInputChange}
@@ -104,15 +167,16 @@ const AppointmentInput: React.FC<IAppointmentInputProps> = ({
 
       <Box sx={{ display: "flex", flexDirection: "row", width: "100%" }}>
         <SideInputBox side={"left"}>
-          <InputBox
+          <SelectBox
             name={"petID"}
-            label={"PETID"}
+            label={"PET"}
             value={formData.petID}
             hasError={Boolean(errors.petID)}
             errorText={errors.petID || ""}
             handleChange={handleInputChange}
             disabled={disabled}
-          ></InputBox>
+            options={petsOptions}
+          ></SelectBox>
         </SideInputBox>
         <SideInputBox side={"right"}>
           <InputBox
@@ -156,26 +220,28 @@ const AppointmentInput: React.FC<IAppointmentInputProps> = ({
 
       <Box sx={{ display: "flex", flexDirection: "row", width: "100%" }}>
         <SideInputBox side={"left"}>
-          <InputBox
+          <SelectBox
             name={"ownerID"}
-            label={"OWNERID"}
+            label={"OWNER"}
             value={formData.ownerID}
             hasError={Boolean(errors.ownerID)}
             errorText={errors.ownerID || ""}
             handleChange={handleInputChange}
             disabled={disabled}
-          ></InputBox>
+            options={ownersOptions}
+          ></SelectBox>
         </SideInputBox>
         <SideInputBox side={"right"}>
-          <InputBox
+          <SelectBox
             name={"vetID"}
-            label={"VETID"}
+            label={"VET"}
             value={formData.vetID}
             hasError={Boolean(errors.vetID)}
             errorText={errors.vetID || ""}
             handleChange={handleInputChange}
             disabled={disabled}
-          ></InputBox>
+            options={vetsOptions}
+          ></SelectBox>
         </SideInputBox>
       </Box>
     </>

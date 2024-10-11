@@ -64,6 +64,7 @@ export const useAppointmentForm = (): FormHookType => {
     });
 
     if (error) {
+      console.log(error);
       const newErrors: Partial<Record<keyof IAppointmentHookJson, string>> = {};
       error.details.forEach((detail: any) => {
         const field = detail.path[0] as keyof IAppointmentHookJson; // Explicitly type the field as keyof IAppointmentJson
@@ -80,8 +81,8 @@ export const useAppointmentForm = (): FormHookType => {
   };
 
   const resetForm = () => {
-    setFormData({
-      id: "",
+    setFormData((prevFormData) => ({
+      ...prevFormData, // Spread the previous form data to preserve other fields
       date: "",
       hour: "",
       examination: "",
@@ -90,14 +91,14 @@ export const useAppointmentForm = (): FormHookType => {
       petID: "",
       ownerID: "",
       vetID: "",
-    });
+    }));
+
     setErrors({});
   };
 
   return {
     formData,
     handleFormData: setFormData,
-
     errors,
     handleInputChange,
     verifyErrors,

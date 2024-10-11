@@ -184,7 +184,10 @@ const DatePicker: React.FC<IDatePickerProps> = ({
             color: "secondary.dark",
             paddingX: theme.spacing(3),
           }}
-          onClick={() => setReset(!reset)}
+          onClick={() => {
+            setReset(!reset);
+            setDate("");
+          }}
         >
           {`RESET`}
         </Button>

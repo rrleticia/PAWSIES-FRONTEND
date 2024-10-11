@@ -9,7 +9,7 @@ export const TheoBanner = () => {
   return (
     <Box
       sx={{
-        position: "relative",
+        position: "sticky",
         display: "inline-block",
         width: "100%",
       }}

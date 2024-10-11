@@ -23,9 +23,9 @@ const getAll = async (): Promise<IAppointment[] | Error> => {
   }
 };
 
-const search = async (id: string): Promise<IAppointment[] | Error> => {
+const search = async (name: string): Promise<IAppointment[] | Error> => {
   try {
-    const { data } = await Api.get(`/appointment/${id}`);
+    const { data } = await Api.get(`/appointment/pet/${name}`);
 
     if (data) {
       return data;

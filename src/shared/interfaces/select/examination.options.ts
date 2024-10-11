@@ -1,4 +1,6 @@
-export const examinationOptions: { value: string; label: string }[] = [
+import { SelectType } from "../type";
+
+export const examinationOptions: SelectType[] = [
   { value: "CHECK_UP", label: "CHECK_UP" },
   { value: "FOLLOW_UP", label: "FOLLOW_UP" },
   { value: "ROUTINE", label: "ROUTINE" },

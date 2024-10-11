@@ -10,6 +10,7 @@ export interface IPetHookJson {
   color: string;
   age: string;
   weight: string;
+  ownerID: string;
 }
 
 export const usePetForm = (): FormHookType => {
@@ -21,6 +22,7 @@ export const usePetForm = (): FormHookType => {
     color: "",
     age: "",
     weight: "",
+    ownerID: "",
   });
 
   const [errors, setErrors] = useState<
@@ -33,6 +35,7 @@ export const usePetForm = (): FormHookType => {
     color: "",
     age: "",
     weight: "",
+    ownerID: "",
   });
 
   // Handle input changes
@@ -74,15 +77,16 @@ export const usePetForm = (): FormHookType => {
   };
 
   const resetForm = () => {
-    setFormData({
-      id: "",
+    setFormData((prevFormData) => ({
+      ...prevFormData, // Spread the previous form data to preserve other fields
       type: "",
       name: "",
       breed: "",
       color: "",
       age: "",
       weight: "",
-    });
+      ownerID: "",
+    }));
     setErrors({});
   };
 

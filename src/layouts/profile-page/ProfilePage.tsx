@@ -68,6 +68,8 @@ export const ProfilePage = <T,>({
     }
   };
 
+  useEffect(() => handleOperationChange("VIEW"), [navigate]);
+
   useEffect(() => {
     if (loginStatus) handleInit();
     else navigate("/home");
@@ -87,6 +89,7 @@ export const ProfilePage = <T,>({
         handleMessageChange(result.message + ".");
         toggleError();
       } else {
+        changeUser(result);
         toggleResult();
       }
     }
@@ -94,49 +97,49 @@ export const ProfilePage = <T,>({
   };
 
   return (
-    <form onSubmit={handleSubmit}>
-      <Box
-        sx={{
-          display: "flex",
-          flex: 1,
-          height: "100%",
-          width: "100%",
-          justifyContent: "center",
+    <Box
+      component="form"
+      onSubmit={handleSubmit}
+      sx={{
+        display: "flex",
+        flex: 1,
+        height: "100%",
+        width: "100%",
+        justifyContent: "center",
+      }}
+    >
+      <OperationCard
+        minHeight={minHeight}
+        operation={operation}
+        handleOperationChange={handleOperationChange}
+        disabledExisting={loading}
+        resetForm={resetForm}
+        toggleCancel={toggleCancel}
+      ></OperationCard>
+
+      <InputCard
+        minHeight={minHeight}
+        route_upper={route_upper}
+        children={children}
+      ></InputCard>
+
+      <OperationDialog
+        model={route}
+        operation={operation}
+        description={errorMessage}
+        openResult={openResult}
+        toggleResult={toggleResult}
+        openError={openError}
+        toggleError={toggleError}
+        openCancel={openCancel}
+        toggleCancel={toggleCancel}
+        handleCancelation={() => {
+          resetForm();
+          handleOperationChange("NONE");
+          navigate("/home", { replace: true });
         }}
-      >
-        <OperationCard
-          minHeight={minHeight}
-          operation={operation}
-          handleOperationChange={handleOperationChange}
-          disabledExisting={loading}
-          resetForm={resetForm}
-          toggleCancel={toggleCancel}
-        ></OperationCard>
-
-        <InputCard
-          minHeight={minHeight}
-          route_upper={route_upper}
-          children={children}
-        ></InputCard>
-
-        <OperationDialog
-          model={route}
-          operation={operation}
-          description={errorMessage}
-          openResult={openResult}
-          toggleResult={toggleResult}
-          openError={openError}
-          toggleError={toggleError}
-          openCancel={openCancel}
-          toggleCancel={toggleCancel}
-          handleCancelation={() => {
-            resetForm();
-            handleOperationChange("NONE");
-            navigate("/home");
-          }}
-        ></OperationDialog>
-      </Box>
-    </form>
+      ></OperationDialog>
+    </Box>
   );
 };
 
@@ -215,7 +218,7 @@ const OperationCard: React.FC<IOperationCardProps> = ({
               handleOperationChange("EDIT");
             }
           }}
-        ></RoundedSwitchButton>{" "}
+        ></RoundedSwitchButton>
         <RoundedSwitchButton
           text={"LOGOUT"}
           filled={true}

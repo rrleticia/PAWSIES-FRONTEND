@@ -1,4 +1,5 @@
 import Joi from "joi";
+import { PetModel } from "./pet.model";
 
 export const AppointmentModel = Joi.object().keys({
   id: Joi.string().trim().min(1).allow(""),
@@ -77,4 +78,5 @@ export const AppointmentModel = Joi.object().keys({
   ownerID: Joi.string().required(),
   createdAt: Joi.date(),
   updatedAt: Joi.date(),
+  pet: PetModel,
 });
